@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced AI Chatbot Demo - NextBloom</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .typing-dots .dot {
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: #6b7280;
+            margin: 0 1px;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .chat-message {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+            80%, 100% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+        
+        .voice-wave {
+            animation: voiceWave 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes voiceWave {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.5); }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-robot text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">Enhanced AI Chatbot</h1>
+                        <p class="text-white/80">Multilingual Career Guidance Assistant</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="bg-white/20 rounded-lg px-4 py-2">
+                        <span class="text-sm">🌍 Multi-language Support</span>
+                    </div>
+                    <div class="bg-white/20 rounded-lg px-4 py-2">
+                        <span class="text-sm">🎤 Voice Enabled</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Features Overview -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-comments text-2xl text-blue-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Natural Conversation</h3>
+                <p class="text-gray-600">Chat naturally with AI that understands context and provides personalized responses</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-microphone text-2xl text-green-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Voice Input & Output</h3>
+                <p class="text-gray-600">Speak your questions and get voice responses automatically in your preferred language</p>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-lg p-6 text-center">
+                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-globe text-2xl text-purple-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Multilingual Support</h3>
+                <p class="text-gray-600">Communicate in English, Spanish, Hindi, French, or German with native-like understanding</p>
+            </div>
+        </div>
+
+        <!-- Demo Instructions -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">🚀 Try the Enhanced Chatbot</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">What You Can Ask:</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>"I want to learn web development"</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>"I'm feeling anxious about my career"</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>"Create a roadmap for data science"</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>"¿Qué carrera me recomiendas?" (Spanish)</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-check text-green-500"></i>
+                            <span>"मुझे करियर गाइडेंस चाहिए" (Hindi)</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">Voice Features:</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-microphone text-blue-500"></i>
+                            <span>Click the mic button to speak</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-volume-up text-blue-500"></i>
+                            <span>Enable voice mode for automatic responses</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-language text-blue-500"></i>
+                            <span>Switch languages anytime</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-robot text-blue-500"></i>
+                            <span>AI responds in your chosen language</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                <p class="text-blue-800">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    <strong>Pro Tip:</strong> Enable voice mode and have a natural conversation! The AI will automatically listen for your response after speaking.
+                </p>
+            </div>
+        </div>
+
+        <!-- Launch Button -->
+        <div class="text-center">
+            <button id="launch-chatbot" class="gradient-bg text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 floating">
+                <i class="fas fa-rocket mr-2"></i>
+                Launch Enhanced Chatbot
+            </button>
+        </div>
+    </main>
+
+    <!-- Load the enhanced chatbot -->
+    <script src="enhanced_chatbot.js"></script>
+    
+    <script>
+        // Launch chatbot when button is clicked
+        document.getElementById('launch-chatbot').addEventListener('click', function() {
+            // Initialize the enhanced chatbot if not already done
+            if (!window.enhancedChatbot) {
+                window.enhancedChatbot = new EnhancedChatbot();
+            }
+            
+            // Open the chatbot
+            setTimeout(() => {
+                window.enhancedChatbot.openChatbot();
+            }, 500);
+            
+            // Update button text
+            this.innerHTML = '<i class="fas fa-comments mr-2"></i>Chatbot Launched!';
+            this.classList.add('bg-green-500');
+            this.classList.remove('gradient-bg');
+            
+            // Show success message
+            showNotification('🎉 Enhanced Chatbot is ready! Try speaking to it!', 'success');
+        });
+        
+        // Notification function
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm transform translate-x-full transition-transform duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                type === 'warning' ? 'bg-yellow-500 text-black' :
+                'bg-blue-500 text-white'
+            }`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span class="text-sm">${message}</span>
+                    <button class="ml-3 text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
+        
+        // Check browser compatibility
+        document.addEventListener('DOMContentLoaded', function() {
+            const hasVoiceSupport = 'speechSynthesis' in window && ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
+            
+            if (!hasVoiceSupport) {
+                showNotification('⚠️ Voice features may not be fully supported in this browser. Try Chrome for the best experience.', 'warning');
+            } else {
+                showNotification('✅ All features are supported in this browser!', 'success');
+            }
+        });
+    </script>
+</body>
+</html>

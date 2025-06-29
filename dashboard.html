@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | NextBloom - AI-Powered Learning Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    
+    .glass-dark {
+      background: rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .floating-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .feature-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .hero-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)"/><circle cx="800" cy="300" r="150" fill="url(%23a)"/><circle cx="400" cy="700" r="120" fill="url(%23a)"/></svg>');
+      opacity: 0.3;
+    }
+    
+    .scroll-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      z-index: 100;
+      transition: width 0.3s ease;
+    }
+
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .mobile-menu.show {
+      transform: translateX(0);
+    }
+
+    .progress-bar {
+      transition: width 0.5s ease-in-out;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .hero-bg {
+        padding: 2rem 1rem;
+      }
+      
+      .feature-card {
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 text-gray-800 overflow-x-hidden min-h-screen">
+
+  <!-- Scroll Progress Indicator -->
+  <div id="scroll-indicator" class="scroll-indicator"></div>
+
+  <!-- Enhanced Floating Navbar -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 glass-dark z-50 transition-all duration-500 py-3 md:py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between">
+        
+        <!-- Brand Section -->
+        <div class="flex items-center space-x-2 md:space-x-3">
+          <div class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-graduation-cap text-white text-sm md:text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-lg md:text-xl lg:text-2xl font-bold text-white transition-colors duration-300">NextBloom</h1>
+            <p class="text-xs text-white/70 transition-all duration-300 hidden sm:block">Dashboard</p>
+          </div>
+        </div>
+
+        <!-- Navigation Links - Desktop -->
+        <div class="hidden lg:flex items-center space-x-6 xl:space-x-8">
+          <a href="index.html" class="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
+            <i class="fas fa-home mr-2"></i>Home
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="sessions.html" class="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
+            <i class="fas fa-video mr-2"></i>1-on-1 Sessions
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="chat.html" class="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
+            <i class="fas fa-comments mr-2"></i>AI Chat
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="learning.html" class="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
+            <i class="fas fa-book-open mr-2"></i>Courses
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+        </div>
+
+        <!-- User Section -->
+        <div class="flex items-center space-x-2 md:space-x-3">
+          <!-- User Info - Hidden on small screens -->
+          <div class="hidden md:flex items-center space-x-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/20">
+            <i class="fas fa-user-circle text-white text-sm"></i>
+            <span class="text-white text-xs">Welcome </span>
+            <span id="user-display-name" class="text-white text-xs font-medium"></span>
+          </div>
+          
+          <!-- Logout Button - Desktop -->
+          <button id="logout-btn" class="hidden md:block bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-semibold hover:from-red-600 hover:to-pink-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+            <i class="fas fa-sign-out-alt mr-1"></i>
+            <span class="hidden lg:inline">Logout</span>
+          </button>
+          
+          <!-- Mobile Menu Button -->
+          <button id="mobile-menu-btn" class="lg:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors duration-300">
+            <i class="fas fa-bars text-lg md:text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu lg:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-lg shadow-xl">
+      <div class="px-4 sm:px-6 py-4 space-y-3">
+        <!-- User Info Mobile -->
+        <div class="flex items-center space-x-3 py-3 px-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-100">
+          <i class="fas fa-user-circle text-purple-600 text-lg"></i>
+          <div>
+            <span class="text-gray-600 text-sm">Welcome, </span>
+            <span id="mobile-user-display-name" class="text-purple-700 font-medium text-sm"></span>
+          </div>
+        </div>
+        
+        <!-- Navigation Links -->
+        <a href="index.html" class="block text-gray-800 font-medium py-3 px-4 hover:text-purple-600 hover:bg-purple-50 transition-colors duration-300 rounded-lg">
+          <i class="fas fa-home w-5 mr-3"></i>Home
+        </a>
+        <a href="sessions.html" class="block text-gray-800 font-medium py-3 px-4 hover:text-purple-600 hover:bg-purple-50 transition-colors duration-300 rounded-lg">
+          <i class="fas fa-video w-5 mr-3"></i>1-on-1 Sessions
+        </a>
+        <a href="chat.html" class="block text-gray-800 font-medium py-3 px-4 hover:text-purple-600 hover:bg-purple-50 transition-colors duration-300 rounded-lg">
+          <i class="fas fa-comments w-5 mr-3"></i>AI Chat
+        </a>
+        <a href="learning.html" class="block text-gray-800 font-medium py-3 px-4 hover:text-purple-600 hover:bg-purple-50 transition-colors duration-300 rounded-lg">
+          <i class="fas fa-book-open w-5 mr-3"></i>Courses
+        </a>
+        
+        <!-- Logout Button Mobile -->
+        <div class="pt-3 border-t border-gray-200">
+          <button id="mobile-logout-btn" class="w-full bg-gradient-to-r from-red-500 to-pink-500 text-white px-6 py-3 rounded-full font-semibold hover:from-red-600 hover:to-pink-600 transition-all duration-300 shadow-lg">
+            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="pt-20 md:pt-24 pb-8 md:pb-12">
+    <!-- Hero Welcome Section -->
+    <section class="hero-bg py-8 md:py-16 lg:py-20 px-4 sm:px-6 relative">
+      <!-- Floating Elements -->
+      <div class="absolute -top-10 -left-10 md:-top-20 md:-left-20 w-20 h-20 md:w-40 md:h-40 bg-white/10 rounded-full floating-animation"></div>
+      <div class="absolute -bottom-10 -right-10 md:-bottom-20 md:-right-20 w-30 h-30 md:w-60 md:h-60 bg-white/5 rounded-full floating-animation" style="animation-delay: -3s;"></div>
+      
+      <div class="max-w-6xl mx-auto text-center relative z-10">
+        <div class="mb-6 md:mb-8">
+          <div class="inline-block bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 md:px-6 md:py-2 mb-4 md:mb-6">
+            <span class="text-white/90 text-xs md:text-sm font-medium">🎯 Your Learning Dashboard</span>
+          </div>
+          
+          <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold leading-tight mb-4 md:mb-6 text-white">
+            Welcome back,
+            <span id="user-first-name" class="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">User</span>
+          </h1>
+          
+          <p class="text-sm sm:text-base md:text-lg lg:text-xl mb-6 md:mb-8 max-w-2xl mx-auto text-white/90 leading-relaxed px-4">
+            Ready to continue your AI-powered learning journey? Let's achieve your goals together.
+          </p>
+        </div>
+
+        <!-- User Stats Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 max-w-4xl mx-auto">
+          <div class="glass p-3 sm:p-4 md:p-6 rounded-xl md:rounded-2xl text-center">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg md:rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3">
+              <i class="fas fa-graduation-cap text-white text-sm md:text-xl"></i>
+            </div>
+            <div class="text-white/70 text-xs md:text-sm">Education Level</div>
+            <div id="user-education" class="text-white font-bold text-sm md:text-lg">-</div>
+          </div>
+          
+          <div class="glass p-3 sm:p-4 md:p-6 rounded-xl md:rounded-2xl text-center">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg md:rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3">
+              <i class="fas fa-calendar-alt text-white text-sm md:text-xl"></i>
+            </div>
+            <div class="text-white/70 text-xs md:text-sm">Age</div>
+            <div id="user-age" class="text-white font-bold text-sm md:text-lg">-</div>
+          </div>
+          
+          <div class="glass p-3 sm:p-4 md:p-6 rounded-xl md:rounded-2xl text-center">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-orange-400 to-red-500 rounded-lg md:rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3">
+              <i class="fas fa-clock text-white text-sm md:text-xl"></i>
+            </div>
+            <div class="text-white/70 text-xs md:text-sm">Member Since</div>
+            <div id="user-since" class="text-white font-bold text-sm md:text-lg">Today</div>
+          </div>
+          
+          <div class="glass p-3 sm:p-4 md:p-6 rounded-xl md:rounded-2xl text-center">
+            <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-teal-400 to-green-500 rounded-lg md:rounded-xl flex items-center justify-center mx-auto mb-2 md:mb-3">
+              <i class="fas fa-trophy text-white text-sm md:text-xl"></i>
+            </div>
+            <div class="text-white/70 text-xs md:text-sm">Achievements</div>
+            <div id="user-achievements" class="text-white font-bold text-sm md:text-lg">0</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
+      
+      <!-- Quick Actions Section -->
+      <div class="mb-8 md:mb-12">
+        <h2 class="text-2xl md:text-3xl font-bold gradient-text mb-6 md:mb-8 text-center">🚀 Quick Actions</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          
+          <!-- 1-on-1 Sessions -->
+          <a href="sessions.html" class="feature-card stat-card p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg group">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+              <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg md:rounded-xl flex items-center justify-center">
+                <i class="fas fa-video text-white text-lg md:text-xl"></i>
+              </div>
+              <i class="fas fa-arrow-right text-gray-400 group-hover:text-purple-500 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-lg md:text-xl font-semibold text-gray-800 mb-2">🎯 1-on-1 Sessions</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Book personalized sessions with expert mentors</p>
+          </a>
+
+          <!-- AI Chat Assistant -->
+          <a href="chat.html" class="feature-card stat-card p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg group">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+              <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-red-400 to-yellow-500 rounded-lg md:rounded-xl flex items-center justify-center">
+                <i class="fas fa-robot text-white text-lg md:text-xl"></i>
+              </div>
+              <i class="fas fa-arrow-right text-gray-400 group-hover:text-purple-500 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-lg md:text-xl font-semibold text-gray-800 mb-2">🤖 AI Chat</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Get instant help from your AI learning assistant</p>
+          </a>
+
+          <!-- Voice Learning -->
+          <a href="learning.html" class="feature-card stat-card p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg group">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+              <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-indigo-400 to-cyan-500 rounded-lg md:rounded-xl flex items-center justify-center">
+                <i class="fas fa-microphone text-white text-lg md:text-xl"></i>
+              </div>
+              <i class="fas fa-arrow-right text-gray-400 group-hover:text-purple-500 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-lg md:text-xl font-semibold text-gray-800 mb-2">🎤 Voice Learning</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Learn through interactive voice conversations</p>
+          </a>
+
+          <!-- Progress Tracker -->
+          <button onclick="showProgressModal()" class="feature-card stat-card p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg group text-left w-full">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+              <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg md:rounded-xl flex items-center justify-center">
+                <i class="fas fa-chart-line text-white text-lg md:text-xl"></i>
+              </div>
+              <i class="fas fa-arrow-right text-gray-400 group-hover:text-purple-500 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-lg md:text-xl font-semibold text-gray-800 mb-2">📊 Progress</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Track your learning journey and achievements</p>
+          </button>
+
+          <!-- Resume Builder -->
+          <a href="resume-builder.html" class="feature-card stat-card p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg group">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+              <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-orange-400 to-red-500 rounded-lg md:rounded-xl flex items-center justify-center">
+                <i class="fas fa-file-alt text-white text-lg md:text-xl"></i>
+              </div>
+              <i class="fas fa-arrow-right text-gray-400 group-hover:text-purple-500 group-hover:translate-x-1 transition-all duration-300"></i>
+            </div>
+            <h3 class="text-lg md:text-xl font-semibold text-gray-800 mb-2">📄 Resume Builder</h3>
+            <p class="text-gray-600 text-sm leading-relaxed">Create professional resumes with AI assistance</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Learning Stats -->
+      <div class="mb-8 md:mb-12">
+        <h2 class="text-2xl md:text-3xl font-bold gradient-text mb-6 md:mb-8 text-center">📈 Your Learning Stats</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          
+          <!-- Study Streak -->
+          <div class="stat-card p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg feature-card">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+              <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg md:rounded-xl flex items-center justify-center">
+                <i class="fas fa-fire text-white text-lg md:text-xl"></i>
+              </div>
+              <div class="text-right">
+                <div id="study-streak-days" class="text-xl md:text-2xl font-bold text-gray-800">0</div>
+                <div class="text-gray-600 text-xs md:text-sm">Days</div>
+              </div>
+            </div>
+            <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-2">🔥 Study Streak</h3>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div id="study-streak-progress" class="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full progress-bar" style="width: 0%"></div>
+            </div>
+            <p id="study-streak-message" class="text-gray-600 text-xs mt-2">Start your learning streak today!</p>
+          </div>
+
+          <!-- Courses Progress -->
+          <div class="stat-card p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg feature-card">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+              <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg md:rounded-xl flex items-center justify-center">
+                <i class="fas fa-book-open text-white text-lg md:text-xl"></i>
+              </div>
+              <div class="text-right">
+                <div id="active-courses" class="text-xl md:text-2xl font-bold text-gray-800">0</div>
+                <div class="text-gray-600 text-xs md:text-sm">Active</div>
+              </div>
+            </div>
+            <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-2">📚 Courses</h3>
+            <div id="course-progress-container" class="space-y-2">
+              <div class="text-center text-gray-500 text-sm py-2">No active courses yet</div>
+            </div>
+          </div>
+
+          <!-- Study Time -->
+          <div class="stat-card p-4 md:p-6 rounded-xl md:rounded-2xl shadow-lg feature-card">
+            <div class="flex items-center justify-between mb-3 md:mb-4">
+              <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-orange-400 to-red-500 rounded-lg md:rounded-xl flex items-center justify-center">
+                <i class="fas fa-clock text-white text-lg md:text-xl"></i>
+              </div>
+              <div class="text-right">
+                <div id="total-study-hours" class="text-xl md:text-2xl font-bold text-gray-800">0</div>
+                <div class="text-gray-600 text-xs md:text-sm">Hours</div>
+              </div>
+            </div>
+            <h3 class="text-base md:text-lg font-semibold text-gray-800 mb-2">⏰ Study Time</h3>
+            <div class="flex items-center space-x-2">
+              <div class="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r from-orange-100 to-red-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-calendar-day text-orange-600 text-xs"></i>
+              </div>
+              <div>
+                <div id="today-study-time" class="text-sm font-medium text-gray-800">0 hrs today</div>
+                <div id="study-time-message" class="text-xs text-gray-600">Start learning today!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity & Goals -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-8 md:mb-12">
+        
+        <!-- Recent Activity -->
+        <div class="stat-card rounded-xl md:rounded-2xl shadow-lg p-4 md:p-6">
+          <div class="flex items-center justify-between mb-4 md:mb-6">
+            <h3 class="text-xl md:text-2xl font-bold gradient-text">📋 Recent Activity</h3>
+            <button onclick="clearAllActivity()" class="text-purple-600 hover:text-purple-800 transition-colors duration-300 text-sm">
+              <i class="fas fa-trash-alt mr-1"></i>Clear
+            </button>
+          </div>
+          <div id="recent-activity-container" class="space-y-3 md:space-y-4">
+            <div class="text-center text-gray-500 text-sm py-4">No recent activity yet. Start learning to see your progress!</div>
+          </div>
+        </div>
+
+        <!-- Learning Goals -->
+        <div class="stat-card rounded-xl md:rounded-2xl shadow-lg p-4 md:p-6">
+          <div class="flex items-center justify-between mb-4 md:mb-6">
+            <h3 class="text-xl md:text-2xl font-bold gradient-text">🎯 Learning Goals</h3>
+            <button onclick="addNewGoal()" class="text-purple-600 hover:text-purple-800 transition-colors duration-300 text-sm">
+              <i class="fas fa-plus mr-1"></i>Add Goal
+            </button>
+          </div>
+          <div id="learning-goals-container" class="space-y-3 md:space-y-4">
+            <div class="text-center text-gray-500 text-sm py-4">Set your first learning goal to get started!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Achievements Section -->
+      <div class="mb-8 md:mb-12">
+        <h2 class="text-2xl md:text-3xl font-bold gradient-text mb-6 md:mb-8 text-center">🏆 Achievements</h2>
+        <div class="stat-card rounded-xl md:rounded-2xl shadow-lg p-4 md:p-6">
+          <div class="flex items-center justify-between mb-4 md:mb-6">
+            <h3 class="text-lg md:text-xl font-bold text-gray-800">Your Badges</h3>
+            <span id="total-achievements" class="text-purple-600 font-medium text-sm">0 earned</span>
+          </div>
+          <div id="achievements-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
+            <div class="text-center text-gray-500 text-sm py-4 col-span-full">Complete activities to earn your first badge!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Modal -->
+  <div id="progressModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="stat-card rounded-xl md:rounded-2xl p-4 md:p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4 md:mb-6">
+        <h2 class="text-xl md:text-2xl font-bold gradient-text">📊 Learning Progress</h2>
+        <button onclick="closeProgressModal()" class="text-gray-500 hover:text-gray-700 transition-colors">
+          <i class="fas fa-times text-lg md:text-xl"></i>
+        </button>
+      </div>
+      
+      <!-- Progress Chart Container -->
+      <div class="mb-4 md:mb-6">
+        <canvas id="progressChart" width="400" height="200"></canvas>
+      </div>
+      
+      <!-- Detailed Stats -->
+      <div class="grid grid-cols-2 gap-3 md:gap-4">
+        <div class="text-center p-3 md:p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg md:rounded-xl">
+          <div id="modal-study-hours" class="text-lg md:text-2xl font-bold text-purple-600">0</div>
+          <div class="text-gray-600 text-xs md:text-sm">Hours Studied</div>
+        </div>
+        <div class="text-center p-3 md:p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg md:rounded-xl">
+          <div id="modal-courses-completed" class="text-lg md:text-2xl font-bold text-green-600">0</div>
+          <div class="text-gray-600 text-xs md:text-sm">Courses Completed</div>
+        </div>
+        <div class="text-center p-3 md:p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-lg md:rounded-xl">
+          <div id="modal-average-score" class="text-lg md:text-2xl font-bold text-orange-600">0%</div>
+          <div class="text-gray-600 text-xs md:text-sm">Average Score</div>
+        </div>
+        <div class="text-center p-3 md:p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg md:rounded-xl">
+          <div id="modal-study-streak" class="text-lg md:text-2xl font-bold text-pink-600">0</div>
+          <div class="text-gray-600 text-xs md:text-sm">Day Streak</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Goal Modal -->
+  <div id="addGoalModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="stat-card rounded-xl md:rounded-2xl p-4 md:p-6 max-w-md w-full">
+      <div class="flex items-center justify-between mb-4 md:mb-6">
+        <h2 class="text-lg md:text-xl font-bold gradient-text">🎯 Add New Goal</h2>
+        <button onclick="closeAddGoalModal()" class="text-gray-500 hover:text-gray-700 transition-colors">
+          <i class="fas fa-times text-lg"></i>
+        </button>
+      </div>
+      
+      <form onsubmit="saveNewGoal(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Goal Title</label>
+          <input type="text" id="goalTitle" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="e.g., Complete Python Course">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Target Date</label>
+          <input type="date" id="goalDate" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+        </div>
+        <div class="flex space-x-3 pt-4">
+          <button type="button" onclick="closeAddGoalModal()" class="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+            Cancel
+          </button>
+          <button type="submit" class="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-2 rounded-lg font-medium hover:from-purple-600 hover:to-blue-600 transition-all duration-300">
+            Add Goal
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Dashboard Data Management
+    class DashboardData {
+      constructor() {
+        this.initializeData();
+      }
+
+      initializeData() {
+        // Initialize default dashboard data if not exists
+        if (!localStorage.getItem('dashboardData')) {
+          const defaultData = {
+            studyStreak: 0,
+            totalStudyHours: 0,
+            todayStudyTime: 0,
+            activeCourses: [],
+            achievements: [],
+            recentActivity: [],
+            learningGoals: [],
+            lastStudyDate: null,
+            weeklyStudyHours: [0, 0, 0, 0, 0, 0, 0], // Last 7 days
+            quizScores: []
+          };
+          localStorage.setItem('dashboardData', JSON.stringify(defaultData));
+        }
+      }
+
+      getData() {
+        return JSON.parse(localStorage.getItem('dashboardData'));
+      }
+
+      saveData(data) {
+        localStorage.setItem('dashboardData', JSON.stringify(data));
+        this.updateUI();
+      }
+
+      addActivity(activity) {
+        const data = this.getData();
+        data.recentActivity.unshift({
+          ...activity,
+          timestamp: new Date().toISOString(),
+          id: Date.now()
+        });
+        // Keep only last 10 activities
+        data.recentActivity = data.recentActivity.slice(0, 10);
+        this.saveData(data);
+      }
+
+      addStudyTime(hours) {
+        const data = this.getData();
+        const today = new Date().toDateString();
+        
+        // Update total study hours
+        data.totalStudyHours += hours;
+        
+        // Update today's study time
+        if (data.lastStudyDate === today) {
+          data.todayStudyTime += hours;
+        } else {
+          data.todayStudyTime = hours;
+          data.lastStudyDate = today;
+          
+          // Update study streak
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          
+          if (data.lastStudyDate === yesterday.toDateString()) {
+            data.studyStreak += 1;
+          } else {
+            data.studyStreak = 1;
+          }
+        }
+        
+        // Update weekly study hours (shift array and add today's hours)
+        data.weeklyStudyHours.shift();
+        data.weeklyStudyHours.push(data.todayStudyTime);
+        
+        this.saveData(data);
+        this.addActivity({
+          type: 'study',
+          title: `Studied for ${hours} hour${hours !== 1 ? 's' : ''}`,
+          icon: 'fas fa-clock',
+          color: 'from-blue-400 to-purple-500'
+        });
+      }
+
+      addCourse(course) {
+        const data = this.getData();
+        data.activeCourses.push({
+          ...course,
+          id: Date.now(),
+          progress: 0,
+          startDate: new Date().toISOString()
+        });
+        this.saveData(data);
+        this.addActivity({
+          type: 'course',
+          title: `Started "${course.name}"`,
+          icon: 'fas fa-play',
+          color: 'from-green-400 to-blue-500'
+        });
+      }
+
+      updateCourseProgress(courseId, progress) {
+        const data = this.getData();
+        const course = data.activeCourses.find(c => c.id === courseId);
+        if (course) {
+          const oldProgress = course.progress;
+          course.progress = progress;
+          
+          if (progress === 100 && oldProgress < 100) {
+            this.addAchievement('course-complete', `Course Completed: ${course.name}`);
+            this.addActivity({
+              type: 'completion',
+              title: `Completed "${course.name}"`,
+              icon: 'fas fa-check',
+              color: 'from-green-400 to-teal-500'
+            });
+          }
+          
+          this.saveData(data);
+        }
+      }
+
+      addQuizScore(score) {
+        const data = this.getData();
+        data.quizScores.push({
+          score: score,
+          date: new Date().toISOString()
+        });
+        
+        // Keep only last 20 scores
+        data.quizScores = data.quizScores.slice(-20);
+        
+        if (score >= 90) {
+          this.addActivity({
+            type: 'quiz',
+            title: `Excellent quiz score: ${score}%`,
+            icon: 'fas fa-star',
+            color: 'from-yellow-400 to-orange-500'
+          });
+        }
+        
+        this.saveData(data);
+      }
+
+      addAchievement(type, title) {
+        const data = this.getData();
+        const achievement = {
+          type: type,
+          title: title,
+          date: new Date().toISOString(),
+          id: Date.now()
+        };
+        
+        // Check if achievement already exists
+        if (!data.achievements.find(a => a.type === type)) {
+          data.achievements.push(achievement);
+          this.saveData(data);
+          this.addActivity({
+            type: 'achievement',
+            title: `Earned "${title}" badge`,
+            icon: 'fas fa-trophy',
+            color: 'from-yellow-400 to-orange-500'
+          });
+          showNotification(`🏆 Achievement Unlocked: ${title}!`, 'success');
+        }
+      }
+
+      addGoal(goal) {
+        const data = this.getData();
+        data.learningGoals.push({
+          ...goal,
+          id: Date.now(),
+          progress: 0,
+          completed: false,
+          createdDate: new Date().toISOString()
+        });
+        this.saveData(data);
+      }
+
+      updateGoalProgress(goalId, progress) {
+        const data = this.getData();
+        const goal = data.learningGoals.find(g => g.id === goalId);
+        if (goal) {
+          goal.progress = progress;
+          if (progress >= 100 && !goal.completed) {
+            goal.completed = true;
+            this.addAchievement('goal-complete', `Goal Achieved: ${goal.title}`);
+          }
+          this.saveData(data);
+        }
+      }
+
+      clearAllActivity() {
+        const data = this.getData();
+        data.recentActivity = [];
+        this.saveData(data);
+      }
+
+      updateUI() {
+        const data = this.getData();
+        
+        // Update study streak
+        document.getElementById('study-streak-days').textContent = data.studyStreak;
+        const streakProgress = Math.min((data.studyStreak / 7) * 100, 100);
+        document.getElementById('study-streak-progress').style.width = streakProgress + '%';
+        
+        const streakMessage = data.studyStreak === 0 ? 'Start your learning streak today!' :
+                             data.studyStreak < 7 ? `${7 - data.studyStreak} more days for a milestone!` :
+                             '🔥 Amazing streak! Keep it up!';
+        document.getElementById('study-streak-message').textContent = streakMessage;
+        
+        // Update study time
+        document.getElementById('total-study-hours').textContent = Math.round(data.totalStudyHours);
+        document.getElementById('today-study-time').textContent = `${data.todayStudyTime} hrs today`;
+        
+        const timeMessage = data.todayStudyTime === 0 ? 'Start learning today!' :
+                           data.todayStudyTime >= 2 ? 'Great progress today!' :
+                           'Good start! Keep going!';
+        document.getElementById('study-time-message').textContent = timeMessage;
+        
+        // Update active courses
+        document.getElementById('active-courses').textContent = data.activeCourses.length;
+        this.updateCoursesDisplay(data.activeCourses);
+        
+        // Update achievements
+        document.getElementById('user-achievements').textContent = data.achievements.length;
+        document.getElementById('total-achievements').textContent = `${data.achievements.length} earned`;
+        this.updateAchievementsDisplay(data.achievements);
+        
+        // Update recent activity
+        this.updateRecentActivityDisplay(data.recentActivity);
+        
+        // Update learning goals
+        this.updateLearningGoalsDisplay(data.learningGoals);
+        
+        // Update modal stats
+        document.getElementById('modal-study-hours').textContent = Math.round(data.totalStudyHours);
+        document.getElementById('modal-courses-completed').textContent = data.activeCourses.filter(c => c.progress === 100).length;
+        document.getElementById('modal-study-streak').textContent = data.studyStreak;
+        
+        const avgScore = data.quizScores.length > 0 ? 
+          Math.round(data.quizScores.reduce((sum, q) => sum + q.score, 0) / data.quizScores.length) : 0;
+        document.getElementById('modal-average-score').textContent = avgScore + '%';
+      }
+
+      updateCoursesDisplay(courses) {
+        const container = document.getElementById('course-progress-container');
+        if (courses.length === 0) {
+          container.innerHTML = '<div class="text-center text-gray-500 text-sm py-2">No active courses yet</div>';
+          return;
+        }
+        
+        container.innerHTML = courses.slice(0, 3).map(course => `
+          <div class="space-y-1">
+            <div class="flex justify-between text-sm">
+              <span class="text-gray-600">${course.name}</span>
+              <span class="text-purple-600 font-medium">${course.progress}%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-1.5">
+              <div class="bg-gradient-to-r from-purple-400 to-pink-500 h-1.5 rounded-full progress-bar" style="width: ${course.progress}%"></div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      updateAchievementsDisplay(achievements) {
+        const container = document.getElementById('achievements-container');
+        if (achievements.length === 0) {
+          container.innerHTML = '<div class="text-center text-gray-500 text-sm py-4 col-span-full">Complete activities to earn your first badge!</div>';
+          return;
+        }
+        
+        const achievementTypes = {
+          'first-login': { icon: 'fas fa-user-plus', color: 'from-blue-400 to-purple-500', title: 'Welcome!' },
+          'study-streak-7': { icon: 'fas fa-fire', color: 'from-orange-400 to-red-500', title: 'Week Warrior' },
+          'course-complete': { icon: 'fas fa-graduation-cap', color: 'from-green-400 to-blue-500', title: 'Graduate' },
+          'quiz-master': { icon: 'fas fa-brain', color: 'from-purple-400 to-pink-500', title: 'Quiz Master' },
+          'goal-complete': { icon: 'fas fa-target', color: 'from-teal-400 to-green-500', title: 'Goal Crusher' }
+        };
+        
+        container.innerHTML = achievements.map(achievement => {
+          const type = achievementTypes[achievement.type] || achievementTypes['first-login'];
+          return `
+            <div class="text-center p-3 bg-gradient-to-r ${type.color} rounded-lg text-white">
+              <i class="${type.icon} text-lg mb-2"></i>
+              <div class="text-xs font-medium">${type.title}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      updateRecentActivityDisplay(activities) {
+        const container = document.getElementById('recent-activity-container');
+        if (activities.length === 0) {
+          container.innerHTML = '<div class="text-center text-gray-500 text-sm py-4">No recent activity yet. Start learning to see your progress!</div>';
+          return;
+        }
+        
+        container.innerHTML = activities.slice(0, 5).map(activity => {
+          const timeAgo = this.getTimeAgo(new Date(activity.timestamp));
+          return `
+            <div class="flex items-center space-x-3 md:space-x-4 p-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg md:rounded-xl border border-blue-100">
+              <div class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r ${activity.color} rounded-full flex items-center justify-center">
+                <i class="${activity.icon} text-white text-sm"></i>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-gray-900 font-medium text-sm md:text-base truncate">${activity.title}</p>
+                <p class="text-gray-500 text-xs md:text-sm flex items-center">
+                  <i class="fas fa-clock mr-1"></i>${timeAgo}
+                </p>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      updateLearningGoalsDisplay(goals) {
+        const container = document.getElementById('learning-goals-container');
+        if (goals.length === 0) {
+          container.innerHTML = '<div class="text-center text-gray-500 text-sm py-4">Set your first learning goal to get started!</div>';
+          return;
+        }
+        
+        container.innerHTML = goals.filter(g => !g.completed).slice(0, 3).map(goal => {
+          const daysLeft = Math.ceil((new Date(goal.targetDate) - new Date()) / (1000 * 60 * 60 * 24));
+          const isOverdue = daysLeft < 0;
+          
+          return `
+            <div class="border-l-4 ${goal.completed ? 'border-green-500' : isOverdue ? 'border-red-500' : 'border-purple-500'} pl-3 md:pl-4 py-2">
+              <h4 class="font-semibold text-gray-800 text-sm md:text-base">${goal.title}</h4>
+              <div class="flex items-center justify-between mt-2">
+                <span class="text-gray-600 text-xs md:text-sm">Progress: ${goal.progress}%</span>
+                <span class="text-xs md:text-sm font-medium ${isOverdue ? 'text-red-600' : 'text-purple-600'}">
+                  ${isOverdue ? 'Overdue' : `${daysLeft} days left`}
+                </span>
+              </div>
+              <div class="w-full bg-gray-200 rounded-full h-1.5 md:h-2 mt-2">
+                <div class="bg-gradient-to-r from-purple-400 to-blue-500 h-1.5 md:h-2 rounded-full progress-bar" style="width: ${goal.progress}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      getTimeAgo(date) {
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - date) / 1000);
+        
+        if (diffInSeconds < 60) return 'Just now';
+        if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+        if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+        return `${Math.floor(diffInSeconds / 86400)}d ago`;
+      }
+    }
+
+    // Initialize dashboard data manager
+    const dashboardData = new DashboardData();
+
+    // Scroll Progress Indicator
+    function updateScrollProgress() {
+      const scrollTop = window.pageYOffset;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      document.getElementById('scroll-indicator').style.width = scrollPercent + '%';
+    }
+
+    window.addEventListener('scroll', updateScrollProgress);
+
+    // Mobile Menu Toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', function() {
+        mobileMenu.classList.toggle('show');
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+          mobileMenu.classList.remove('show');
+        }
+      });
+    }
+
+    // Modal Functions
+    function showProgressModal() {
+      document.getElementById('progressModal').classList.remove('hidden');
+      initProgressChart();
+    }
+
+    function closeProgressModal() {
+      document.getElementById('progressModal').classList.add('hidden');
+    }
+
+    function showAddGoalModal() {
+      document.getElementById('addGoalModal').classList.remove('hidden');
+      // Set minimum date to today
+      document.getElementById('goalDate').min = new Date().toISOString().split('T')[0];
+    }
+
+    function closeAddGoalModal() {
+      document.getElementById('addGoalModal').classList.add('hidden');
+      document.getElementById('goalTitle').value = '';
+      document.getElementById('goalDate').value = '';
+    }
+
+    function addNewGoal() {
+      showAddGoalModal();
+    }
+
+    function saveNewGoal(event) {
+      event.preventDefault();
+      const title = document.getElementById('goalTitle').value;
+      const targetDate = document.getElementById('goalDate').value;
+      
+      dashboardData.addGoal({
+        title: title,
+        targetDate: targetDate
+      });
+      
+      closeAddGoalModal();
+      showNotification('🎯 New goal added successfully!', 'success');
+    }
+
+    function clearAllActivity() {
+      if (confirm('Are you sure you want to clear all activity? This cannot be undone.')) {
+        dashboardData.clearAllActivity();
+        showNotification('Activity cleared successfully!', 'info');
+      }
+    }
+
+    // Initialize Progress Chart
+    function initProgressChart() {
+      const data = dashboardData.getData();
+      const ctx = document.getElementById('progressChart').getContext('2d');
+      
+      // Clear existing chart
+      if (window.progressChart) {
+        window.progressChart.destroy();
+      }
+      
+      window.progressChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['6 days ago', '5 days ago', '4 days ago', '3 days ago', '2 days ago', 'Yesterday', 'Today'],
+          datasets: [{
+            label: 'Study Hours',
+            data: data.weeklyStudyHours,
+            borderColor: 'rgb(102, 126, 234)',
+            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Your Weekly Study Progress'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Hours'
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Enhanced Notification System
+    function showNotification(message, type = 'success') {
+      const notification = document.createElement('div');
+      notification.className = `fixed top-4 right-4 px-4 md:px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300 ${
+        type === 'success' ? 'bg-green-500' : 
+        type === 'error' ? 'bg-red-500' : 
+        type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
+      } text-white max-w-sm`;
+      
+      notification.innerHTML = `
+        <div class="flex items-center space-x-2">
+          <i class="fas ${
+            type === 'success' ? 'fa-check' : 
+            type === 'error' ? 'fa-times' : 
+            type === 'warning' ? 'fa-exclamation' : 'fa-info'
+          }"></i>
+          <span class="text-sm md:text-base">${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Animate in
+      setTimeout(() => notification.classList.remove('translate-x-full'), 100);
+      
+      // Remove after 4 seconds
+      setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => notification.remove(), 300);
+      }, 4000);
+    }
+
+    // Check authentication
+    function checkAuth() {
+      const userEmail = localStorage.getItem('userEmail');
+      if (!userEmail) {
+        // Show enhanced access restriction modal
+        const overlay = document.createElement('div');
+        overlay.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4';
+        overlay.innerHTML = `
+          <div class="stat-card rounded-xl md:rounded-2xl p-6 md:p-8 max-w-md mx-auto text-center">
+            <div class="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r from-red-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
+              <i class="fas fa-lock text-white text-lg md:text-2xl"></i>
+            </div>
+            <h3 class="text-lg md:text-2xl font-bold text-gray-900 mb-2 md:mb-4">Access Restricted</h3>
+            <p class="text-gray-600 mb-4 md:mb-6 text-sm md:text-base">Please log in to access your personalized dashboard and continue your learning journey.</p>
+            <div class="space-y-3">
+              <a href="login.html" class="block bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 md:px-6 py-2 md:py-3 rounded-full font-semibold hover:from-purple-600 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-center text-sm md:text-base">
+                <i class="fas fa-sign-in-alt mr-2"></i>Go to Login
+              </a>
+              <a href="index.html" class="block text-gray-600 hover:text-purple-600 transition-colors duration-300 text-center py-2 border border-gray-200 rounded-full hover:bg-purple-50 text-sm md:text-base">
+                <i class="fas fa-home mr-2"></i>Back to Home
+              </a>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+        
+        // Redirect after 5 seconds
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 5000);
+        return;
+      }
+      
+      // Display user profile information
+      const userData = localStorage.getItem('userData');
+      if (userData) {
+        try {
+          const user = JSON.parse(userData);
+          // Display first name in header and hero
+          const displayName = user.firstName || userEmail.split('@')[0];
+          document.getElementById('user-display-name').textContent = displayName;
+          document.getElementById('mobile-user-display-name').textContent = displayName;
+          document.getElementById('user-first-name').textContent = displayName;
+          document.getElementById('user-education').textContent = user.education || 'Not specified';
+          document.getElementById('user-age').textContent = user.age ? `${user.age} years` : 'Not specified';
+          
+          // Calculate member since date
+          const memberSince = user.memberSince || new Date().toISOString().split('T')[0];
+          const memberDate = new Date(memberSince);
+          const now = new Date();
+          const diffTime = Math.abs(now - memberDate);
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          
+          if (diffDays === 1) {
+            document.getElementById('user-since').textContent = 'Today';
+          } else if (diffDays < 30) {
+            document.getElementById('user-since').textContent = `${diffDays} days`;
+          } else if (diffDays < 365) {
+            const months = Math.floor(diffDays / 30);
+            document.getElementById('user-since').textContent = `${months} month${months > 1 ? 's' : ''}`;
+          } else {
+            const years = Math.floor(diffDays / 365);
+            document.getElementById('user-since').textContent = `${years} year${years > 1 ? 's' : ''}`;
+          }
+          
+        } catch (e) {
+          console.error('Error parsing user data:', e);
+          // Fallback to email if user data parsing fails
+          const fallbackName = userEmail.split('@')[0];
+          document.getElementById('user-display-name').textContent = fallbackName;
+          document.getElementById('mobile-user-display-name').textContent = fallbackName;
+          document.getElementById('user-first-name').textContent = fallbackName;
+        }
+      } else {
+        // Fallback to email if no user data
+        const fallbackName = userEmail.split('@')[0];
+        document.getElementById('user-display-name').textContent = fallbackName;
+        document.getElementById('mobile-user-display-name').textContent = fallbackName;
+        document.getElementById('user-first-name').textContent = fallbackName;
+      }
+      
+      // Check if this is first login
+      if (!localStorage.getItem('dashboardInitialized')) {
+        dashboardData.addAchievement('first-login', 'Welcome to NextBloom!');
+        localStorage.setItem('dashboardInitialized', 'true');
+      }
+      
+      // Update dashboard UI
+      dashboardData.updateUI();
+    }
+
+    // Enhanced Logout functionality
+    function handleLogout() {
+      // Show confirmation modal
+      const confirmModal = document.createElement('div');
+      confirmModal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4';
+      confirmModal.innerHTML = `
+        <div class="stat-card rounded-xl md:rounded-2xl p-4 md:p-6 max-w-sm mx-auto text-center">
+          <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r from-orange-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-sign-out-alt text-white"></i>
+          </div>
+          <h3 class="text-base md:text-lg font-semibold text-gray-900 mb-2">Confirm Logout</h3>
+          <p class="text-gray-600 mb-4 md:mb-6 text-sm md:text-base">Are you sure you want to logout? Your progress will be saved.</p>
+          <div class="flex space-x-3">
+            <button onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-200 text-gray-800 px-3 md:px-4 py-2 rounded-full font-medium hover:bg-gray-300 transition-colors text-sm md:text-base">
+              Cancel
+            </button>
+            <button onclick="confirmLogout()" class="flex-1 bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 md:px-4 py-2 rounded-full font-medium hover:from-red-600 hover:to-pink-600 transition-all duration-300 text-sm md:text-base">
+              Logout
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(confirmModal);
+    }
+
+    function confirmLogout() {
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userData');
+      sessionStorage.removeItem('welcomeShown');
+      
+      // Remove confirmation modal
+      document.querySelector('.fixed.inset-0').remove();
+      
+      // Show success notification
+      showNotification('Logged out successfully! See you soon! 👋', 'success');
+      
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 1500);
+    }
+
+    // Event Listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      checkAuth();
+      
+      // Add logout event listeners
+      const logoutBtn = document.getElementById('logout-btn');
+      const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+      
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', handleLogout);
+      }
+      
+      if (mobileLogoutBtn) {
+        mobileLogoutBtn.addEventListener('click', handleLogout);
+      }
+      
+      // Add welcome message
+      setTimeout(() => {
+        const userName = document.getElementById('user-first-name').textContent;
+        showNotification(`Welcome back, ${userName}! Ready to learn? 🚀`, 'info');
+      }, 1000);
+    });
+
+    // Also check when page becomes visible (in case user logged out from another tab)
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) {
+        checkAuth();
+      }
+    });
+
+    // Demo functions for testing
+    window.addDemoActivity = function() {
+      const activities = [
+        { title: 'Completed Python Basics Quiz', icon: 'fas fa-check', color: 'from-green-400 to-blue-500' },
+        { title: 'Started Machine Learning Course', icon: 'fas fa-play', color: 'from-blue-400 to-purple-500' },
+        { title: 'Studied for 2 hours', icon: 'fas fa-clock', color: 'from-orange-400 to-red-500' },
+        { title: 'Earned Quick Learner badge', icon: 'fas fa-trophy', color: 'from-yellow-400 to-orange-500' }
+      ];
+      const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+      dashboardData.addActivity(randomActivity);
+      showNotification('Demo activity added!', 'success');
+    };
+
+    window.addDemoStudyTime = function() {
+      const hours = Math.floor(Math.random() * 3) + 1;
+      dashboardData.addStudyTime(hours);
+      showNotification(`Added ${hours} hour${hours !== 1 ? 's' : ''} of study time!`, 'success');
+    };
+
+    window.addDemoCourse = function() {
+      const courses = [
+        'Introduction to AI',
+        'Python for Beginners',
+        'Data Science Fundamentals',
+        'Machine Learning Basics',
+        'Web Development'
+      ];
+      const randomCourse = courses[Math.floor(Math.random() * courses.length)];
+      dashboardData.addCourse({ name: randomCourse });
+      showNotification(`Added course: ${randomCourse}!`, 'success');
+    };
+
+    window.simulateProgress = function() {
+      const data = dashboardData.getData();
+      if (data.activeCourses.length > 0) {
+        const course = data.activeCourses[0];
+        const newProgress = Math.min(course.progress + 25, 100);
+        dashboardData.updateCourseProgress(course.id, newProgress);
+        showNotification(`Course progress updated to ${newProgress}%!`, 'success');
+      } else {
+        showNotification('Add a course first!', 'warning');
+      }
+    };
+
+    // Add global test functions for development
+    window.testLogin = function(email = 'test@example.com', name = 'Test User') {
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userData', JSON.stringify({
+        firstName: name, 
+        email: email,
+        education: 'Bachelor\'s Degree',
+        age: 25,
+        memberSince: '2024-01-01'
+      }));
+      checkAuth();
+      showNotification('Test login completed! 🎉', 'success');
+    };
+
+    window.testLogout = function() {
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userData');
+      localStorage.removeItem('dashboardData');
+      localStorage.removeItem('dashboardInitialized');
+      sessionStorage.removeItem('welcomeShown');
+      location.reload();
+    };
+  </script>
+
+</body>
+</html>

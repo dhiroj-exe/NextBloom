@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NGO Financial Support | NextBloom - Dropout Recovery Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    
+    .glass-dark {
+      background: rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .floating-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .navbar-scrolled {
+      background: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      padding: 12px 0 !important;
+    }
+    
+    .navbar-scrolled .nav-brand h1 {
+      color: #1f2937 !important;
+    }
+    
+    .navbar-scrolled .nav-brand p {
+      color: #6b7280 !important;
+    }
+    
+    .navbar-scrolled .nav-links a {
+      color: #374151 !important;
+    }
+    
+    .navbar-scrolled .nav-links a:hover {
+      color: #7c3aed !important;
+    }
+    
+    .navbar-scrolled .cta-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+      color: white !important;
+    }
+    
+    .navbar-scrolled .mobile-menu-btn {
+      color: #374151 !important;
+    }
+    
+    .navbar-scrolled .mobile-menu-btn:hover {
+      color: #7c3aed !important;
+    }
+    
+    .navbar-scrolled .nav-brand .text-sm {
+      color: #059669 !important;
+    }
+    
+    .navbar-scrolled * {
+      text-shadow: none !important;
+    }
+    
+    .navbar-scrolled .nav-brand h1,
+    .navbar-scrolled .nav-brand p,
+    .navbar-scrolled .nav-links a {
+      text-shadow: none !important;
+      font-weight: 500 !important;
+    }
+    
+    .nav-menu {
+      transform: translateY(-10px);
+      opacity: 0;
+      animation: slideDown 0.5s ease-out forwards;
+    }
+    
+    @keyframes slideDown {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .scroll-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      z-index: 100;
+      transition: width 0.3s ease;
+    }
+    
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+    }
+    
+    .mobile-menu.active {
+      transform: translateX(0);
+    }
+    
+    .ngo-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .ngo-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.95);
+    }
+    
+    .hero-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)"/><circle cx="800" cy="300" r="150" fill="url(%23a)"/><circle cx="400" cy="700" r="120" fill="url(%23a)"/></svg>');
+      opacity: 0.3;
+    }
+    
+    .fade-in-up {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    
+    .fade-in-up.animate {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    
+    .fade-in-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .slide-in-left {
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    
+    .slide-in-left.animate {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    
+    .slide-in-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .slide-in-right {
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    
+    .slide-in-right.animate {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    
+    .slide-in-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .pulse-glow {
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulseGlow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(102, 126, 234, 0.8);
+      }
+    }
+    
+    .category-filter {
+      transition: all 0.3s ease;
+    }
+    
+    .category-filter.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      transform: scale(1.05);
+    }
+    
+    .support-badge {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    
+    .contact-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .contact-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .search-box {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .stats-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .morphing-blob {
+      animation: morphBlob 8s ease-in-out infinite;
+    }
+    
+    @keyframes morphBlob {
+      0%, 100% {
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      }
+      25% {
+        border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+      }
+      50% {
+        border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%;
+      }
+      75% {
+        border-radius: 60% 40% 60% 30% / 70% 30% 60% 70%;
+      }
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .ngo-card {
+        margin-bottom: 1rem;
+      }
+      
+      .hero-bg h1 {
+        font-size: 2rem;
+      }
+      
+      .hero-bg p {
+        font-size: 1rem;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .category-filter {
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+      }
+      
+      .ngo-card {
+        padding: 1rem;
+      }
+      
+      .stats-card {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 text-gray-800 overflow-x-hidden">
+
+  <!-- Scroll Progress Indicator -->
+  <div id="scroll-indicator" class="scroll-indicator"></div>
+
+  <!-- Enhanced Floating Navbar -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 glass-dark z-50 transition-all duration-500 py-4">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="flex items-center justify-between">
+        
+        <!-- Brand Section -->
+        <div class="flex items-center space-x-3 nav-brand">
+          <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-graduation-cap text-white text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-xl md:text-2xl font-bold text-white transition-colors duration-300">NextBloom</h1>
+            <p id="navbar-subtitle" class="text-xs text-white/70 transition-all duration-300 opacity-0">NGO Financial Support</p>
+          </div>
+        </div>
+
+        <!-- Desktop Navigation Links -->
+        <div class="hidden md:flex items-center space-x-8 nav-links nav-menu">
+          <a href="index.html" class="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
+            Home
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="index.html#features" class="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
+            Features
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="index.html#about" class="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
+            About
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+          <a href="ngo-support.html" class="text-white hover:text-white transition-all duration-300 font-medium relative group border-b-2 border-purple-400">
+            NGO Support
+            <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-purple-400 to-blue-400"></span>
+          </a>
+          <a href="index.html#contact" class="text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
+            Contact
+            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 transition-all duration-300 group-hover:w-full"></span>
+          </a>
+        </div>
+
+        <!-- CTA Button & Mobile Menu -->
+        <div class="flex items-center space-x-3">
+          <a href="index.html" class="hidden md:block bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:from-purple-600 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+            Back to Home
+          </a>
+          
+          <!-- Mobile Menu Button -->
+          <button id="mobile-menu-btn" class="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors duration-300 mobile-menu-btn">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-lg shadow-xl">
+      <div class="px-6 py-4 space-y-4">
+        <a href="index.html" class="block text-gray-800 font-medium py-2 hover:text-purple-600 transition-colors duration-300">
+          <i class="fas fa-home w-5 mr-3"></i>Home
+        </a>
+        <a href="index.html#features" class="block text-gray-800 font-medium py-2 hover:text-purple-600 transition-colors duration-300">
+          <i class="fas fa-star w-5 mr-3"></i>Features
+        </a>
+        <a href="index.html#about" class="block text-gray-800 font-medium py-2 hover:text-purple-600 transition-colors duration-300">
+          <i class="fas fa-info-circle w-5 mr-3"></i>About
+        </a>
+        <a href="ngo-support.html" class="block text-purple-600 font-medium py-2 border-l-4 border-purple-600 pl-3">
+          <i class="fas fa-hands-helping w-5 mr-3"></i>NGO Support
+        </a>
+        <a href="index.html#contact" class="block text-gray-800 font-medium py-2 hover:text-purple-600 transition-colors duration-300">
+          <i class="fas fa-envelope w-5 mr-3"></i>Contact
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-bg min-h-screen flex items-center justify-center relative pt-20">
+    <div class="max-w-7xl mx-auto px-6 md:px-8 text-center relative z-10">
+      <div class="fade-in-up">
+        <div class="inline-flex items-center bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/30">
+          <i class="fas fa-hands-helping text-white mr-2"></i>
+          <span class="text-white text-sm font-medium">Financial Support Available</span>
+        </div>
+        
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+          NGO <span class="gradient-text bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">Financial Support</span>
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+          Connect with trusted NGOs providing financial assistance, scholarships, and support programs for dropout recovery and educational advancement.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <button onclick="document.getElementById('ngo-directory').scrollIntoView({behavior: 'smooth'})" class="bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 pulse-glow">
+            <i class="fas fa-search mr-2"></i>Find NGOs
+          </button>
+          <button onclick="document.getElementById('how-it-works').scrollIntoView({behavior: 'smooth'})" class="border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-purple-600 transition-all duration-300 shadow-xl">
+            <i class="fas fa-info-circle mr-2"></i>How It Works
+          </button>
+        </div>
+      </div>
+      
+      <!-- Floating Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 fade-in-up">
+        <div class="stats-card p-6 rounded-2xl text-center">
+          <div class="text-3xl md:text-4xl font-bold text-white mb-2">50+</div>
+          <div class="text-white/80">Partner NGOs</div>
+        </div>
+        <div class="stats-card p-6 rounded-2xl text-center">
+          <div class="text-3xl md:text-4xl font-bold text-white mb-2">₹10L+</div>
+          <div class="text-white/80">Funds Distributed</div>
+        </div>
+        <div class="stats-card p-6 rounded-2xl text-center">
+          <div class="text-3xl md:text-4xl font-bold text-white mb-2">1000+</div>
+          <div class="text-white/80">Students Helped</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Animated Background Elements -->
+    <div class="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full morphing-blob"></div>
+    <div class="absolute bottom-20 right-10 w-32 h-32 bg-white/5 rounded-full floating-animation"></div>
+    <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-white/10 rounded-full floating-animation" style="animation-delay: -2s;"></div>
+  </section>
+
+  <!-- Search and Filter Section -->
+  <section class="py-16 bg-white/50 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="text-center mb-12 fade-in-up">
+        <h2 class="text-3xl md:text-4xl font-bold gradient-text mb-4">Find the Right Support</h2>
+        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Search and filter NGOs based on your specific needs and location</p>
+      </div>
+      
+      <!-- Search Bar -->
+      <div class="max-w-2xl mx-auto mb-8 fade-in-up">
+        <div class="search-box p-4 rounded-2xl shadow-lg">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <div class="flex-1">
+              <input type="text" id="search-input" placeholder="Search NGOs by name, location, or support type..." 
+                     class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+            </div>
+            <button onclick="filterNGOs()" class="contact-btn px-6 py-3 rounded-xl font-semibold">
+              <i class="fas fa-search mr-2"></i>Search
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Category Filters -->
+      <div class="flex flex-wrap justify-center gap-4 mb-8 fade-in-up">
+        <button onclick="filterByCategory('all')" class="category-filter active px-6 py-3 rounded-full border border-gray-300 hover:border-purple-500 transition-all duration-300">
+          All NGOs
+        </button>
+        <button onclick="filterByCategory('education')" class="category-filter px-6 py-3 rounded-full border border-gray-300 hover:border-purple-500 transition-all duration-300">
+          Education
+        </button>
+        <button onclick="filterByCategory('scholarship')" class="category-filter px-6 py-3 rounded-full border border-gray-300 hover:border-purple-500 transition-all duration-300">
+          Scholarships
+        </button>
+        <button onclick="filterByCategory('vocational')" class="category-filter px-6 py-3 rounded-full border border-gray-300 hover:border-purple-500 transition-all duration-300">
+          Vocational Training
+        </button>
+        <button onclick="filterByCategory('emergency')" class="category-filter px-6 py-3 rounded-full border border-gray-300 hover:border-purple-500 transition-all duration-300">
+          Emergency Aid
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- NGO Directory Section -->
+  <section id="ngo-directory" class="py-16">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="text-center mb-12 fade-in-up">
+        <h2 class="text-3xl md:text-4xl font-bold gradient-text mb-4">NGO Directory</h2>
+        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Comprehensive list of verified NGOs providing financial support for education and skill development</p>
+      </div>
+      
+      <div id="ngo-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- NGO Cards will be populated by JavaScript -->
+      </div>
+      
+      <!-- Load More Button -->
+      <div class="text-center mt-12 fade-in-up">
+        <button onclick="loadMoreNGOs()" class="contact-btn px-8 py-4 rounded-full font-semibold text-lg">
+          <i class="fas fa-plus mr-2"></i>Load More NGOs
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="py-16 bg-gradient-to-r from-purple-50 to-blue-50">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="text-center mb-12 fade-in-up">
+        <h2 class="text-3xl md:text-4xl font-bold gradient-text mb-4">How It Works</h2>
+        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Simple steps to connect with NGOs and access financial support</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="text-center fade-in-up">
+          <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2">1. Search & Filter</h3>
+          <p class="text-gray-600">Browse through our verified NGO directory and filter by your specific needs</p>
+        </div>
+        
+        <div class="text-center fade-in-up" style="animation-delay: 0.2s;">
+          <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2">2. Review Details</h3>
+          <p class="text-gray-600">Check eligibility criteria, support amounts, and application requirements</p>
+        </div>
+        
+        <div class="text-center fade-in-up" style="animation-delay: 0.4s;">
+          <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl">
+            <i class="fas fa-phone"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2">3. Contact NGO</h3>
+          <p class="text-gray-600">Reach out directly through provided contact information or application links</p>
+        </div>
+        
+        <div class="text-center fade-in-up" style="animation-delay: 0.6s;">
+          <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2">4. Get Support</h3>
+          <p class="text-gray-600">Receive financial assistance and continue your educational journey</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Success Stories Section -->
+  <section class="py-16">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="text-center mb-12 fade-in-up">
+        <h2 class="text-3xl md:text-4xl font-bold gradient-text mb-4">Success Stories</h2>
+        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Real stories from students who received NGO support and transformed their lives</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="ngo-card p-6 rounded-2xl shadow-lg slide-in-left">
+          <div class="flex items-center mb-4">
+            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=60&h=60&fit=crop&crop=face" alt="Student" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="font-bold">Priya Sharma</h4>
+              <p class="text-sm text-gray-600">Engineering Student</p>
+            </div>
+          </div>
+          <p class="text-gray-700 mb-4">"Thanks to Akshaya Patra Foundation's support, I was able to complete my engineering degree. The financial assistance covered my tuition fees and living expenses."</p>
+          <div class="support-badge">
+            <i class="fas fa-rupee-sign"></i>
+            ₹2,50,000 Support Received
+          </div>
+        </div>
+        
+        <div class="ngo-card p-6 rounded-2xl shadow-lg fade-in-up" style="animation-delay: 0.2s;">
+          <div class="flex items-center mb-4">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" alt="Student" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="font-bold">Rahul Kumar</h4>
+              <p class="text-sm text-gray-600">Vocational Training Graduate</p>
+            </div>
+          </div>
+          <p class="text-gray-700 mb-4">"CRY Foundation helped me get vocational training in digital marketing. Now I run my own digital agency and employ 5 people."</p>
+          <div class="support-badge">
+            <i class="fas fa-rupee-sign"></i>
+            ₹75,000 Training Support
+          </div>
+        </div>
+        
+        <div class="ngo-card p-6 rounded-2xl shadow-lg slide-in-right">
+          <div class="flex items-center mb-4">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&h=60&fit=crop&crop=face" alt="Student" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="font-bold">Anita Patel</h4>
+              <p class="text-sm text-gray-600">Medical Student</p>
+            </div>
+          </div>
+          <p class="text-gray-700 mb-4">"Smile Foundation's scholarship program made my dream of becoming a doctor possible. Their mentorship program was equally valuable."</p>
+          <div class="support-badge">
+            <i class="fas fa-rupee-sign"></i>
+            ₹5,00,000 Scholarship
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-gradient-to-r from-purple-600 to-blue-600">
+    <div class="max-w-4xl mx-auto text-center px-6 md:px-8">
+      <div class="fade-in-up">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Get Support?</h2>
+        <p class="text-xl text-white/90 mb-8">Don't let financial constraints stop your educational journey. Connect with NGOs today!</p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button onclick="document.getElementById('ngo-directory').scrollIntoView({behavior: 'smooth'})" class="bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105">
+            <i class="fas fa-search mr-2"></i>Browse NGOs
+          </button>
+          <a href="index.html#contact" class="border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-purple-600 transition-all duration-300 shadow-xl">
+            <i class="fas fa-envelope mr-2"></i>Contact Us
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center space-x-3 mb-4">
+            <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
+              <i class="fas fa-graduation-cap text-white"></i>
+            </div>
+            <h3 class="text-xl font-bold">NextBloom</h3>
+          </div>
+          <p class="text-gray-400 mb-4">Empowering dropout recovery through AI-powered learning and NGO partnerships.</p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+              <i class="fab fa-instagram"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="text-gray-400 hover:text-white transition-colors duration-300">Home</a></li>
+            <li><a href="index.html#features" class="text-gray-400 hover:text-white transition-colors duration-300">Features</a></li>
+            <li><a href="index.html#about" class="text-gray-400 hover:text-white transition-colors duration-300">About</a></li>
+            <li><a href="ngo-support.html" class="text-gray-400 hover:text-white transition-colors duration-300">NGO Support</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Support</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Help Center</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Contact Support</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Privacy Policy</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">Terms of Service</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
+          <div class="space-y-2 text-gray-400">
+            <p><i class="fas fa-envelope mr-2"></i>support@nextbloom.edu</p>
+            <p><i class="fas fa-phone mr-2"></i>+91 98765 43210</p>
+            <p><i class="fas fa-map-marker-alt mr-2"></i>Mumbai, Maharashtra, India</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+        <p class="text-gray-400">&copy; 2024 NextBloom. All rights reserved. Empowering education through technology.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // NGO Data
+    const ngoData = [
+      {
+        id: 1,
+        name: "Akshaya Patra Foundation",
+        category: "education",
+        location: "Bangalore, Karnataka",
+        description: "Provides mid-day meals and educational support to underprivileged children. Offers scholarships for higher education and vocational training programs.",
+        supportAmount: "₹50,000 - ₹2,00,000",
+        eligibility: "Students from economically weaker sections, Age 16-25",
+        contact: {
+          phone: "+91 80 3046 4000",
+          email: "info@akshayapatra.org",
+          website: "https://www.akshayapatra.org"
+        },
+        image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&h=250&fit=crop",
+        verified: true,
+        rating: 4.8,
+        studentsHelped: 250
+      },
+      {
+        id: 2,
+        name: "CRY - Child Rights and You",
+        category: "vocational",
+        location: "Mumbai, Maharashtra",
+        description: "Focuses on child rights and education. Provides vocational training, skill development programs, and financial assistance for continuing education.",
+        supportAmount: "₹25,000 - ₹1,50,000",
+        eligibility: "Age 14-22, School dropouts, Below poverty line",
+        contact: {
+          phone: "+91 22 2663 4725",
+          email: "info@crymail.org",
+          website: "https://www.cry.org"
+        },
+        image: "https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=400&h=250&fit=crop",
+        verified: true,
+        rating: 4.7,
+        studentsHelped: 180
+      },
+      {
+        id: 3,
+        name: "Smile Foundation",
+        category: "scholarship",
+        location: "New Delhi",
+        description: "Comprehensive education support including scholarships, mentorship programs, and career guidance for underprivileged students.",
+        supportAmount: "₹1,00,000 - ₹5,00,000",
+        eligibility: "Merit-based, Family income < ₹3 lakhs, Age 16-24",
+        contact: {
+          phone: "+91 11 4353 5200",
+          email: "info@smilefoundationindia.org",
+          website: "https://www.smilefoundationindia.org"
+        },
+        image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&h=250&fit=crop",
+        verified: true,
+        rating: 4.9,
+        studentsHelped: 320
+      },
+      {
+        id: 4,
+        name: "Teach for India",
+        category: "education",
+        location: "Pan India",
+        description: "Educational support and mentorship programs. Provides financial assistance for students showing academic potential but facing financial constraints.",
+        supportAmount: "₹30,000 - ₹1,00,000",
+        eligibility: "Academic merit, Financial need, Age 15-20",
+        contact: {
+          phone: "+91 22 6121 5000",
+          email: "info@teachforindia.org",
+          website: "https://www.teachforindia.org"
+        },
+        image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=250&fit=crop",
+        verified: true,
+        rating: 4.6,
+        studentsHelped: 150
+      },
+      {
+        id: 5,
+        name: "Pratham Education Foundation",
+        category: "education",
+        location: "Mumbai, Maharashtra",
+        description: "Focuses on improving quality of education. Offers remedial education programs, digital literacy, and financial support for continuing education.",
+        supportAmount: "₹20,000 - ₹80,000",
+        eligibility: "Primary/Secondary dropouts, Age 10-18",
+        contact: {
+          phone: "+91 22 6632 2000",
+          email: "info@pratham.org",
+          website: "https://www.pratham.org"
+        },
+        image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=400&h=250&fit=crop",
+        verified: true,
+        rating: 4.5,
+        studentsHelped: 200
+      },
+      {
+        id: 6,
+        name: "Udaan India Foundation",
+        category: "vocational",
+        location: "Gurgaon, Haryana",
+        description: "Skill development and employment generation programs. Provides vocational training in IT, healthcare, and manufacturing sectors.",
+        supportAmount: "₹15,000 - ₹60,000",
+        eligibility: "Age 18-25, Basic literacy, Commitment to complete training",
+        contact: {
+          phone: "+91 124 4951 000",
+          email: "info@udaanindia.org",
+          website: "https://www.udaanindia.org"
+        },
+        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=250&fit=crop",
+        verified: true,
+        rating: 4.4,
+        studentsHelped: 120
+      },
+      {
+        id: 7,
+        name: "Nanhi Kali Foundation",
+        category: "scholarship",
+        location: "Mumbai, Maharashtra",
+        description: "Focuses on girl child education. Provides scholarships, educational materials, and mentorship specifically for underprivileged girls.",
+        supportAmount: "₹40,000 - ₹2,50,000",
+        eligibility: "Girl students, Age 10-20, Family income < ₹2 lakhs",
+        contact: {
+          phone: "+91 22 6665 8000",
+          email: "info@nanhikali.org",
+          website: "https://www.nanhikali.org"
+        },
+        image: "https://images.unsplash.com/photo-1509909756405-be0199881695?w=400&h=250&fit=crop",
+        verified: true,
+        rating: 4.8,
+        studentsHelped: 280
+      },
+      {
+        id: 8,
+        name: "Magic Bus Foundation",
+        category: "emergency",
+        location: "Mumbai, Maharashtra",
+        description: "Youth development programs with emergency financial assistance. Helps students in crisis situations continue their education.",
+        supportAmount: "₹10,000 - ₹50,000",
+        eligibility: "Emergency situations, Age 14-24, Immediate need",
+        contact: {
+          phone: "+91 22 6700 4500",
+          email: "info@magicbus.org",
+          website: "https://www.magicbus.org"
+        },
+        image: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=250&fit=crop",
+        verified: true,
+        rating: 4.3,
+        studentsHelped: 90
+      },
+      {
+        id: 9,
+        name: "Goonj Foundation",
+        category: "emergency",
+        location: "New Delhi",
+        description: "Disaster relief and development work. Provides emergency educational support and basic necessities for students in crisis.",
+        supportAmount: "₹5,000 - ₹30,000",
+        eligibility: "Emergency cases, Natural disasters, Immediate relief needed",
+        contact: {
+          phone: "+91 11 2691 4229",
+          email: "info@goonj.org",
+          website: "https://www.goonj.org"
+        },
+        image: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=400&h=250&fit=crop",
+        verified: true,
+        rating: 4.6,
+        studentsHelped: 75
+      }
+    ];
+
+    let currentNGOs = ngoData.slice(0, 6);
+    let filteredNGOs = [...ngoData];
+    let currentCategory = 'all';
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Page loaded, initializing...');
+      renderNGOs(currentNGOs);
+      initializeAnimations();
+      initializeNavbar();
+      
+      // Force show all sections
+      setTimeout(() => {
+        document.querySelectorAll('.fade-in-up, .slide-in-left, .slide-in-right').forEach(el => {
+          el.classList.add('visible');
+        });
+      }, 100);
+    });
+
+    // Render NGO cards
+    function renderNGOs(ngos) {
+      const ngoGrid = document.getElementById('ngo-grid');
+      if (!ngoGrid) {
+        console.error('NGO grid element not found');
+        return;
+      }
+      
+      ngoGrid.innerHTML = '';
+      console.log('Rendering', ngos.length, 'NGOs');
+
+      ngos.forEach((ngo, index) => {
+        const ngoCard = createNGOCard(ngo, index);
+        ngoGrid.appendChild(ngoCard);
+      });
+      
+      console.log('NGO cards rendered successfully');
+    }
+
+    // Create NGO card element
+    function createNGOCard(ngo, index) {
+      const card = document.createElement('div');
+      card.className = 'ngo-card p-6 rounded-2xl shadow-lg';
+      card.setAttribute('data-category', ngo.category);
+      card.setAttribute('data-name', ngo.name.toLowerCase());
+      card.setAttribute('data-location', ngo.location.toLowerCase());
+
+      card.innerHTML = `
+        <div class="relative mb-4">
+          <img src="${ngo.image}" alt="${ngo.name}" class="w-full h-48 object-cover rounded-xl">
+          <div class="absolute top-3 right-3 flex gap-2">
+            ${ngo.verified ? '<div class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold"><i class="fas fa-check mr-1"></i>Verified</div>' : ''}
+            <div class="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-semibold text-gray-700">
+              <i class="fas fa-star text-yellow-500 mr-1"></i>${ngo.rating}
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-bold text-gray-800 mb-2">${ngo.name}</h3>
+          <div class="flex items-center text-gray-600 text-sm mb-2">
+            <i class="fas fa-map-marker-alt mr-2"></i>
+            ${ngo.location}
+          </div>
+          <div class="support-badge mb-3">
+            <i class="fas fa-rupee-sign"></i>
+            ${ngo.supportAmount}
+          </div>
+        </div>
+        
+        <p class="text-gray-700 mb-4 text-sm leading-relaxed">${ngo.description}</p>
+        
+        <div class="mb-4">
+          <h4 class="font-semibold text-gray-800 mb-2">Eligibility:</h4>
+          <p class="text-gray-600 text-sm">${ngo.eligibility}</p>
+        </div>
+        
+        <div class="mb-4">
+          <div class="flex items-center justify-between text-sm text-gray-600">
+            <span><i class="fas fa-users mr-1"></i>${ngo.studentsHelped} students helped</span>
+            <span class="capitalize bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs">${ngo.category}</span>
+          </div>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-2">
+          <button onclick="showContactInfo(${ngo.id})" class="contact-btn flex-1 px-4 py-2 rounded-lg font-semibold text-sm">
+            <i class="fas fa-phone mr-2"></i>Contact
+          </button>
+          <a href="${ngo.contact.website}" target="_blank" class="border border-purple-500 text-purple-600 hover:bg-purple-50 flex-1 px-4 py-2 rounded-lg font-semibold text-sm text-center transition-all duration-300">
+            <i class="fas fa-external-link-alt mr-2"></i>Website
+          </a>
+        </div>
+      `;
+
+      return card;
+    }
+
+    // Filter NGOs by category
+    function filterByCategory(category) {
+      currentCategory = category;
+      
+      // Update active filter button
+      document.querySelectorAll('.category-filter').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      // Filter NGOs
+      if (category === 'all') {
+        filteredNGOs = [...ngoData];
+      } else {
+        filteredNGOs = ngoData.filter(ngo => ngo.category === category);
+      }
+
+      currentNGOs = filteredNGOs.slice(0, 6);
+      renderNGOs(currentNGOs);
+    }
+
+    // Search and filter NGOs
+    function filterNGOs() {
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      
+      let filtered = filteredNGOs;
+      
+      if (searchTerm) {
+        filtered = filteredNGOs.filter(ngo => 
+          ngo.name.toLowerCase().includes(searchTerm) ||
+          ngo.location.toLowerCase().includes(searchTerm) ||
+          ngo.description.toLowerCase().includes(searchTerm) ||
+          ngo.category.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      currentNGOs = filtered.slice(0, 6);
+      renderNGOs(currentNGOs);
+    }
+
+    // Load more NGOs
+    function loadMoreNGOs() {
+      const currentLength = currentNGOs.length;
+      const nextBatch = filteredNGOs.slice(currentLength, currentLength + 6);
+      
+      if (nextBatch.length > 0) {
+        currentNGOs = [...currentNGOs, ...nextBatch];
+        renderNGOs(currentNGOs);
+      } else {
+        // Show message when no more NGOs to load
+        const button = event.target;
+        button.innerHTML = '<i class="fas fa-check mr-2"></i>All NGOs Loaded';
+        button.disabled = true;
+        button.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    // Show contact information modal
+    function showContactInfo(ngoId) {
+      const ngo = ngoData.find(n => n.id === ngoId);
+      if (!ngo) return;
+
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+      modal.innerHTML = `
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full max-h-90vh overflow-y-auto">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-gray-800">Contact ${ngo.name}</h3>
+            <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+              <i class="fas fa-times text-xl"></i>
+            </button>
+          </div>
+          
+          <div class="space-y-4">
+            <div class="flex items-center">
+              <i class="fas fa-phone text-purple-600 w-6 mr-3"></i>
+              <div>
+                <p class="font-semibold">Phone</p>
+                <a href="tel:${ngo.contact.phone}" class="text-purple-600 hover:underline">${ngo.contact.phone}</a>
+              </div>
+            </div>
+            
+            <div class="flex items-center">
+              <i class="fas fa-envelope text-purple-600 w-6 mr-3"></i>
+              <div>
+                <p class="font-semibold">Email</p>
+                <a href="mailto:${ngo.contact.email}" class="text-purple-600 hover:underline">${ngo.contact.email}</a>
+              </div>
+            </div>
+            
+            <div class="flex items-center">
+              <i class="fas fa-globe text-purple-600 w-6 mr-3"></i>
+              <div>
+                <p class="font-semibold">Website</p>
+                <a href="${ngo.contact.website}" target="_blank" class="text-purple-600 hover:underline">Visit Website</a>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-6 p-4 bg-purple-50 rounded-lg">
+            <p class="text-sm text-gray-700">
+              <i class="fas fa-info-circle text-purple-600 mr-2"></i>
+              Contact the NGO directly for application procedures and current availability of funds.
+            </p>
+          </div>
+          
+          <div class="mt-4 flex gap-2">
+            <a href="tel:${ngo.contact.phone}" class="contact-btn flex-1 px-4 py-2 rounded-lg font-semibold text-sm text-center">
+              <i class="fas fa-phone mr-2"></i>Call Now
+            </a>
+            <a href="mailto:${ngo.contact.email}" class="border border-purple-500 text-purple-600 hover:bg-purple-50 flex-1 px-4 py-2 rounded-lg font-semibold text-sm text-center transition-all duration-300">
+              <i class="fas fa-envelope mr-2"></i>Email
+            </a>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+    }
+
+    // Initialize animations
+    function initializeAnimations() {
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.fade-in-up, .slide-in-left, .slide-in-right').forEach(el => {
+        observer.observe(el);
+      });
+    }
+
+    // Initialize navbar functionality
+    function initializeNavbar() {
+      const navbar = document.getElementById('navbar');
+      const scrollIndicator = document.getElementById('scroll-indicator');
+      const navbarSubtitle = document.getElementById('navbar-subtitle');
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      // Navbar scroll effects
+      window.addEventListener('scroll', function() {
+        const scrollY = window.pageYOffset;
+        const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollProgress = (scrollY / documentHeight) * 100;
+        
+        // Update scroll progress indicator
+        if (scrollIndicator) {
+          scrollIndicator.style.width = scrollProgress + '%';
+        }
+        
+        // Navbar scroll effects
+        if (navbar) {
+          if (scrollY > 100) {
+            navbar.classList.add('navbar-scrolled');
+            if (navbarSubtitle) {
+              navbarSubtitle.style.opacity = '1';
+              navbarSubtitle.style.transform = 'translateY(0)';
+            }
+          } else {
+            navbar.classList.remove('navbar-scrolled');
+            if (navbarSubtitle) {
+              navbarSubtitle.style.opacity = '0';
+              navbarSubtitle.style.transform = 'translateY(-10px)';
+            }
+          }
+        }
+      });
+
+      // Mobile menu toggle
+      let mobileMenuOpen = false;
+      mobileMenuBtn.addEventListener('click', function() {
+        mobileMenuOpen = !mobileMenuOpen;
+        if (mobileMenuOpen) {
+          mobileMenu.classList.add('active');
+        } else {
+          mobileMenu.classList.remove('active');
+        }
+      });
+
+      // Close mobile menu when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+          mobileMenu.classList.remove('active');
+          mobileMenuOpen = false;
+        }
+      });
+    }
+
+    // Search on Enter key
+    document.getElementById('search-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        filterNGOs();
+      }
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          const offsetTop = target.offsetTop - 80;
+          window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

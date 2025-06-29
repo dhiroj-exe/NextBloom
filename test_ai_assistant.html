@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistant Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-8">AI Assistant API Test</h1>
+        
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Test Chat Endpoint</h2>
+            <div class="space-y-4">
+                <div>
+                    <input type="text" id="test-message" placeholder="Enter your message..." 
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                </div>
+                <button onclick="testChat()" 
+                        class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                    Send Message
+                </button>
+            </div>
+            <div id="chat-response" class="mt-4 p-4 bg-gray-50 rounded-lg hidden">
+                <h3 class="font-semibold mb-2">AI Response:</h3>
+                <div id="response-content"></div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Test Career Paths</h2>
+            <button onclick="testCareerPaths()" 
+                    class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                Get Career Paths
+            </button>
+            <div id="career-response" class="mt-4 p-4 bg-gray-50 rounded-lg hidden">
+                <h3 class="font-semibold mb-2">Career Paths:</h3>
+                <div id="career-content"></div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Test Emotional Support</h2>
+            <div class="space-x-2 mb-4">
+                <button onclick="testEmotionalSupport('anxiety')" 
+                        class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors">
+                    Anxiety Support
+                </button>
+                <button onclick="testEmotionalSupport('motivation')" 
+                        class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                    Motivation
+                </button>
+                <button onclick="testEmotionalSupport('confidence')" 
+                        class="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition-colors">
+                    Confidence
+                </button>
+            </div>
+            <div id="support-response" class="mt-4 p-4 bg-gray-50 rounded-lg hidden">
+                <h3 class="font-semibold mb-2">Support Message:</h3>
+                <div id="support-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5000/api/ai';
+
+        async function testChat() {
+            const message = document.getElementById('test-message').value.trim();
+            if (!message) {
+                alert('Please enter a message');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        user_email: 'test@example.com'
+                    })
+                });
+
+                const data = await response.json();
+                
+                const responseDiv = document.getElementById('chat-response');
+                const contentDiv = document.getElementById('response-content');
+                
+                if (data.success) {
+                    const aiResponse = data.response;
+                    let content = `<p class="mb-2"><strong>Response:</strong> ${aiResponse.response}</p>`;
+                    
+                    if (aiResponse.options) {
+                        content += `<p class="mb-2"><strong>Options:</strong></p><ul class="list-disc list-inside">`;
+                        aiResponse.options.forEach(option => {
+                            content += `<li>${option}</li>`;
+                        });
+                        content += `</ul>`;
+                    }
+                    
+                    if (aiResponse.suggestions) {
+                        content += `<p class="mb-2"><strong>Suggestions:</strong></p><ul class="list-disc list-inside">`;
+                        aiResponse.suggestions.forEach(suggestion => {
+                            content += `<li>${suggestion}</li>`;
+                        });
+                        content += `</ul>`;
+                    }
+                    
+                    contentDiv.innerHTML = content;
+                } else {
+                    contentDiv.innerHTML = `<p class="text-red-600">Error: ${data.message}</p>`;
+                }
+                
+                responseDiv.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to connect to the API. Make sure the backend server is running.');
+            }
+        }
+
+        async function testCareerPaths() {
+            try {
+                const response = await fetch(`${API_BASE}/career-paths`);
+                const data = await response.json();
+                
+                const responseDiv = document.getElementById('career-response');
+                const contentDiv = document.getElementById('career-content');
+                
+                if (data.success) {
+                    let content = '';
+                    Object.keys(data.career_paths).forEach(category => {
+                        content += `<div class="mb-4">`;
+                        content += `<h4 class="font-semibold text-lg capitalize">${category}</h4>`;
+                        content += `<ul class="list-disc list-inside ml-4">`;
+                        data.career_paths[category].paths.forEach(path => {
+                            content += `<li><strong>${path.title}:</strong> ${path.description}</li>`;
+                        });
+                        content += `</ul></div>`;
+                    });
+                    contentDiv.innerHTML = content;
+                } else {
+                    contentDiv.innerHTML = `<p class="text-red-600">Error: ${data.message}</p>`;
+                }
+                
+                responseDiv.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to connect to the API. Make sure the backend server is running.');
+            }
+        }
+
+        async function testEmotionalSupport(mood) {
+            try {
+                const response = await fetch(`${API_BASE}/emotional-support`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ mood: mood })
+                });
+
+                const data = await response.json();
+                
+                const responseDiv = document.getElementById('support-response');
+                const contentDiv = document.getElementById('support-content');
+                
+                if (data.success) {
+                    let content = `<p class="mb-2"><strong>Message:</strong> ${data.message}</p>`;
+                    content += `<p class="mb-2"><strong>Additional Tips:</strong></p><ul class="list-disc list-inside">`;
+                    data.additional_tips.forEach(tip => {
+                        content += `<li>${tip}</li>`;
+                    });
+                    content += `</ul>`;
+                    contentDiv.innerHTML = content;
+                } else {
+                    contentDiv.innerHTML = `<p class="text-red-600">Error: ${data.message}</p>`;
+                }
+                
+                responseDiv.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to connect to the API. Make sure the backend server is running.');
+            }
+        }
+
+        // Allow Enter key to send message
+        document.getElementById('test-message').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                testChat();
+            }
+        });
+    </script>
+</body>
+</html>

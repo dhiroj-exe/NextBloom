@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Builder | NextBloom - AI-Powered Resume Creation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    
+    .glass-dark {
+      background: rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)"/><circle cx="800" cy="300" r="150" fill="url(%23a)"/><circle cx="400" cy="700" r="120" fill="url(%23a)"/></svg>');
+      opacity: 0.3;
+    }
+    
+    .template-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    
+    .template-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .template-card.selected {
+      border: 3px solid #667eea;
+      box-shadow: 0 0 30px rgba(102, 126, 234, 0.3);
+    }
+    
+    .form-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .resume-preview {
+      background: white;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      min-height: 842px; /* A4 height */
+      width: 595px; /* A4 width */
+      transform-origin: top left;
+    }
+    
+    .floating-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .floating-shapes {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .floating-shape {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: floatShapes 20s infinite linear;
+    }
+    
+    @keyframes floatShapes {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    .pulse-ring {
+      animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+    }
+    
+    @keyframes pulse-ring {
+      0% {
+        transform: scale(0.8);
+        opacity: 1;
+      }
+      80%, 100% {
+        transform: scale(1.2);
+        opacity: 0;
+      }
+    }
+    
+    .pulse-glow {
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulseGlow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(102, 126, 234, 0.8);
+      }
+    }
+    
+    .slide-in-left {
+      animation: slideInLeft 0.8s ease-out;
+    }
+    
+    @keyframes slideInLeft {
+      0% {
+        transform: translateX(-100px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .slide-in-right {
+      animation: slideInRight 0.8s ease-out;
+    }
+    
+    @keyframes slideInRight {
+      0% {
+        transform: translateX(100px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      0% {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    /* Template Styles */
+    .template-modern {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .template-classic {
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .template-minimal {
+      font-family: 'Roboto', sans-serif;
+    }
+    
+    .template-creative {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .template-executive {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .template-tech {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    }
+    
+    .template-academic {
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .template-artistic {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    /* Custom template upload styles */
+    .template-upload-area {
+      border: 2px dashed #d1d5db;
+      transition: all 0.3s ease;
+    }
+    
+    .template-upload-area:hover {
+      border-color: #8b5cf6;
+      background-color: #f8fafc;
+    }
+    
+    .template-upload-area.dragover {
+      border-color: #8b5cf6;
+      background-color: #ede9fe;
+    }
+    
+    /* Print styles */
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      
+      .resume-preview {
+        box-shadow: none;
+        transform: none !important;
+      }
+    }
+    
+    /* Responsive design */
+    @media (max-width: 1024px) {
+      .resume-preview {
+        transform: scale(0.7);
+        width: 416px;
+        min-height: 589px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .resume-preview {
+        transform: scale(0.5);
+        width: 297px;
+        min-height: 421px;
+      }
+    }
+    
+    .skill-tag {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin: 2px;
+      display: inline-block;
+    }
+    
+    .section-divider {
+      height: 2px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      margin: 16px 0;
+    }
+    
+    .ai-suggestion {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      border: 1px solid rgba(102, 126, 234, 0.2);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 8px 0;
+    }
+    
+    .loading-spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .scroll-indicator {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transform-origin: left;
+      transform: scaleX(0);
+      z-index: 9999;
+      transition: transform 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 text-gray-800 overflow-x-hidden">
+  
+  <!-- Scroll Progress Indicator -->
+  <div id="scroll-indicator" class="scroll-indicator"></div>
+  <!-- Navigation -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 glass-dark z-50 transition-all duration-500 py-4">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="flex items-center justify-between">
+        <!-- Brand Section -->
+        <div class="flex items-center space-x-3 nav-brand">
+          <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+            <i class="fas fa-graduation-cap text-white text-lg"></i>
+          </div>
+          <div>
+            <h1 class="text-xl md:text-2xl font-bold text-white transition-colors duration-300">NextBloom</h1>
+            <p class="text-xs text-white/70 transition-all duration-300">Resume Builder</p>
+          </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="flex items-center space-x-3">
+          <button id="autoFillBtn" class="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center space-x-2 group">
+            <i class="fas fa-magic group-hover:scale-110 transition-transform duration-300"></i>
+            <span class="hidden sm:inline text-sm font-medium">Auto-Fill</span>
+          </button>
+          <button id="saveBtn" class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center space-x-2 group">
+            <i class="fas fa-save group-hover:scale-110 transition-transform duration-300"></i>
+            <span class="hidden sm:inline text-sm font-medium">Save</span>
+          </button>
+          <button id="downloadBtn" class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition-all duration-300 flex items-center space-x-2 group">
+            <i class="fas fa-download group-hover:scale-110 transition-transform duration-300"></i>
+            <span class="hidden sm:inline text-sm font-medium">Download</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="pt-20 min-h-screen">
+    <!-- Hero Section -->
+    <section class="hero-bg py-16 text-white relative overflow-hidden">
+      <!-- Floating Shapes -->
+      <div class="floating-shapes">
+        <div class="floating-shape w-20 h-20" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="floating-shape w-32 h-32" style="left: 20%; animation-delay: 2s;"></div>
+        <div class="floating-shape w-16 h-16" style="left: 70%; animation-delay: 4s;"></div>
+        <div class="floating-shape w-24 h-24" style="left: 80%; animation-delay: 6s;"></div>
+        <div class="floating-shape w-12 h-12" style="left: 90%; animation-delay: 8s;"></div>
+      </div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 slide-in-left">
+          Build Your Perfect Resume
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 opacity-90 slide-in-right">
+          Create professional resumes with AI-powered suggestions and beautiful templates
+        </p>
+        <div class="flex justify-center items-center space-x-4 fade-in-up">
+          <div class="bg-white/20 backdrop-blur-md rounded-lg px-6 py-3">
+            <i class="fas fa-palette text-2xl mr-2"></i>
+            <span class="font-semibold">Multiple Templates</span>
+          </div>
+          <div class="bg-white/20 backdrop-blur-md rounded-lg px-6 py-3">
+            <i class="fas fa-robot text-2xl mr-2"></i>
+            <span class="font-semibold">AI Suggestions</span>
+          </div>
+          <div class="bg-white/20 backdrop-blur-md rounded-lg px-6 py-3">
+            <i class="fas fa-download text-2xl mr-2"></i>
+            <span class="font-semibold">PDF Export</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Template Selection -->
+    <section class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Choose Your Template</h2>
+          <p class="text-xl text-gray-600">Select from our professionally designed templates</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Modern Template -->
+          <div class="template-card bg-white rounded-xl shadow-lg overflow-hidden" data-template="modern">
+            <div class="h-48 bg-gradient-to-br from-blue-500 to-purple-600 p-4 text-white">
+              <div class="text-sm font-semibold mb-2">John Doe</div>
+              <div class="text-xs opacity-90 mb-4">Software Developer</div>
+              <div class="space-y-1">
+                <div class="h-1 bg-white/30 rounded"></div>
+                <div class="h-1 bg-white/30 rounded w-3/4"></div>
+                <div class="h-1 bg-white/30 rounded w-1/2"></div>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-semibold text-gray-900 mb-2">Modern</h3>
+              <p class="text-sm text-gray-600">Clean and contemporary design with gradient accents</p>
+            </div>
+          </div>
+
+          <!-- Classic Template -->
+          <div class="template-card bg-white rounded-xl shadow-lg overflow-hidden" data-template="classic">
+            <div class="h-48 bg-gray-100 p-4">
+              <div class="text-sm font-bold mb-2 text-gray-900">John Doe</div>
+              <div class="text-xs text-gray-600 mb-4">Software Developer</div>
+              <div class="border-b border-gray-300 mb-2"></div>
+              <div class="space-y-1">
+                <div class="h-1 bg-gray-300 rounded"></div>
+                <div class="h-1 bg-gray-300 rounded w-3/4"></div>
+                <div class="h-1 bg-gray-300 rounded w-1/2"></div>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-semibold text-gray-900 mb-2">Classic</h3>
+              <p class="text-sm text-gray-600">Traditional and professional layout</p>
+            </div>
+          </div>
+
+          <!-- Minimal Template -->
+          <div class="template-card bg-white rounded-xl shadow-lg overflow-hidden" data-template="minimal">
+            <div class="h-48 bg-white p-4 border-l-4 border-gray-900">
+              <div class="text-sm font-medium mb-2 text-gray-900">John Doe</div>
+              <div class="text-xs text-gray-500 mb-4">Software Developer</div>
+              <div class="space-y-2">
+                <div class="h-1 bg-gray-200 rounded"></div>
+                <div class="h-1 bg-gray-200 rounded w-3/4"></div>
+                <div class="h-1 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-semibold text-gray-900 mb-2">Minimal</h3>
+              <p class="text-sm text-gray-600">Simple and elegant with clean lines</p>
+            </div>
+          </div>
+
+          <!-- Creative Template -->
+          <div class="template-card rounded-xl shadow-lg overflow-hidden" data-template="creative">
+            <div class="h-48 bg-gradient-to-r from-pink-400 to-orange-400 p-4 text-white relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-16 h-16 bg-white/20 rounded-full -mr-8 -mt-8"></div>
+              <div class="text-sm font-semibold mb-2">John Doe</div>
+              <div class="text-xs opacity-90 mb-4">Software Developer</div>
+              <div class="space-y-1">
+                <div class="h-1 bg-white/30 rounded"></div>
+                <div class="h-1 bg-white/30 rounded w-3/4"></div>
+                <div class="h-1 bg-white/30 rounded w-1/2"></div>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-semibold text-gray-900 mb-2">Creative</h3>
+              <p class="text-sm text-gray-600">Bold and artistic with vibrant colors</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Templates Row -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
+          <!-- Executive Template -->
+          <div class="template-card rounded-xl shadow-lg overflow-hidden" data-template="executive">
+            <div class="h-48 bg-gradient-to-br from-gray-800 to-gray-900 p-4 text-white">
+              <div class="text-sm font-bold mb-2">John Doe</div>
+              <div class="text-xs opacity-90 mb-4 text-yellow-300">Chief Executive Officer</div>
+              <div class="space-y-1">
+                <div class="h-1 bg-yellow-400/40 rounded"></div>
+                <div class="h-1 bg-yellow-400/40 rounded w-3/4"></div>
+                <div class="h-1 bg-yellow-400/40 rounded w-1/2"></div>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-semibold text-gray-900 mb-2">Executive</h3>
+              <p class="text-sm text-gray-600">Professional executive layout</p>
+            </div>
+          </div>
+
+          <!-- Tech Template -->
+          <div class="template-card rounded-xl shadow-lg overflow-hidden" data-template="tech">
+            <div class="h-48 bg-gradient-to-br from-green-500 to-teal-600 p-4 text-white">
+              <div class="text-sm font-mono font-bold mb-2">John Doe()</div>
+              <div class="text-xs opacity-90 mb-4 font-mono">Full Stack Developer</div>
+              <div class="space-y-1">
+                <div class="h-1 bg-white/30 rounded"></div>
+                <div class="h-1 bg-white/30 rounded w-3/4"></div>
+                <div class="h-1 bg-white/30 rounded w-1/2"></div>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-semibold text-gray-900 mb-2">Tech</h3>
+              <p class="text-sm text-gray-600">Developer-focused design</p>
+            </div>
+          </div>
+
+          <!-- Academic Template -->
+          <div class="template-card rounded-xl shadow-lg overflow-hidden" data-template="academic">
+            <div class="h-48 bg-gradient-to-br from-indigo-500 to-blue-600 p-4 text-white">
+              <div class="text-sm font-serif font-bold mb-2">Dr. John Doe</div>
+              <div class="text-xs opacity-90 mb-4">Research Professor</div>
+              <div class="space-y-1">
+                <div class="h-1 bg-white/30 rounded"></div>
+                <div class="h-1 bg-white/30 rounded w-3/4"></div>
+                <div class="h-1 bg-white/30 rounded w-1/2"></div>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-semibold text-gray-900 mb-2">Academic</h3>
+              <p class="text-sm text-gray-600">Academic and research focused</p>
+            </div>
+          </div>
+
+          <!-- Upload Custom Template -->
+          <div class="template-card rounded-xl shadow-lg overflow-hidden border-2 border-dashed border-gray-300 hover:border-purple-500 transition-colors duration-300 cursor-pointer" id="uploadTemplate">
+            <div class="h-48 bg-gradient-to-br from-gray-100 to-gray-200 p-4 flex flex-col items-center justify-center text-gray-600">
+              <i class="fas fa-cloud-upload-alt text-4xl mb-4 text-purple-500"></i>
+              <div class="text-sm font-semibold mb-2 text-center">Upload Custom</div>
+              <div class="text-xs text-center">Click to upload template</div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-semibold text-gray-900 mb-2">Custom</h3>
+              <p class="text-sm text-gray-600">Upload your own design</p>
+            </div>
+          </div>
+        </div>
+
+       
+
+        <!-- Custom Templates Section -->
+        <div id="customTemplatesSection" class="mt-12 hidden">
+          <h3 class="text-2xl font-bold text-gray-900 mb-6">Your Custom Templates</h3>
+          <div id="customTemplatesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Custom templates will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resume Builder Interface -->
+    <section class="py-16 bg-gradient-to-br from-slate-50/80 to-blue-50/80 backdrop-blur-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Form Section -->
+          <div class="space-y-6">
+            <div class="form-section rounded-xl p-6">
+              <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                <i class="fas fa-user text-purple-600 mr-2"></i>
+                Personal Information
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                  <input type="text" id="firstName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                  <input type="text" id="lastName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                  <input type="email" id="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                  <input type="tel" id="phone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
+                  <input type="text" id="address" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Professional Summary</label>
+                  <textarea id="summary" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Brief description of your professional background and goals"></textarea>
+                  <button id="generateSummary" class="mt-2 text-sm text-purple-600 hover:text-purple-800 flex items-center">
+                    <i class="fas fa-magic mr-1"></i>Generate AI Summary
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Experience Section -->
+            <div class="form-section rounded-xl p-6">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+                  <i class="fas fa-briefcase text-purple-600 mr-2"></i>
+                  Work Experience
+                </h3>
+                <button id="addExperience" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                  <i class="fas fa-plus mr-2"></i>Add Experience
+                </button>
+              </div>
+              <div id="experienceContainer">
+                <!-- Experience items will be added here -->
+              </div>
+            </div>
+
+            <!-- Education Section -->
+            <div class="form-section rounded-xl p-6">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+                  <i class="fas fa-graduation-cap text-purple-600 mr-2"></i>
+                  Education
+                </h3>
+                <button id="addEducation" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                  <i class="fas fa-plus mr-2"></i>Add Education
+                </button>
+              </div>
+              <div id="educationContainer">
+                <!-- Education items will be added here -->
+              </div>
+            </div>
+
+            <!-- Skills Section -->
+            <div class="form-section rounded-xl p-6">
+              <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                <i class="fas fa-cogs text-purple-600 mr-2"></i>
+                Skills
+              </h3>
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Add Skills</label>
+                <div class="flex">
+                  <input type="text" id="skillInput" class="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter a skill">
+                  <button id="addSkill" class="bg-purple-600 text-white px-4 py-2 rounded-r-lg hover:bg-purple-700 transition-colors">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              <div id="skillsContainer" class="flex flex-wrap gap-2">
+                <!-- Skills will be added here -->
+              </div>
+              <button id="suggestSkills" class="mt-4 text-sm text-purple-600 hover:text-purple-800 flex items-center">
+                <i class="fas fa-lightbulb mr-1"></i>Suggest Skills Based on Experience
+              </button>
+            </div>
+
+            <!-- Projects Section -->
+            <div class="form-section rounded-xl p-6">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+                  <i class="fas fa-project-diagram text-purple-600 mr-2"></i>
+                  Projects
+                </h3>
+                <button id="addProject" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                  <i class="fas fa-plus mr-2"></i>Add Project
+                </button>
+              </div>
+              <div id="projectsContainer">
+                <!-- Projects will be added here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview Section -->
+          <div class="lg:sticky lg:top-24">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-900">Live Preview</h3>
+                <div class="flex space-x-2">
+                  <button id="zoomOut" class="p-2 text-gray-600 hover:text-gray-800">
+                    <i class="fas fa-search-minus"></i>
+                  </button>
+                  <button id="zoomIn" class="p-2 text-gray-600 hover:text-gray-800">
+                    <i class="fas fa-search-plus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="overflow-auto max-h-screen">
+                <div id="resumePreview" class="resume-preview mx-auto">
+                  <!-- Resume preview will be generated here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Hidden File Input for Template Upload -->
+  <input type="file" id="templateFileInput" accept=".html,.htm,.json" style="display: none;">
+
+  <!-- Loading Modal -->
+  <div id="loadingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden backdrop-blur-sm">
+    <div class="glass rounded-2xl p-8 text-center shadow-2xl">
+      <div class="loading-spinner mx-auto mb-4"></div>
+      <p class="text-white font-medium">Processing your request...</p>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden backdrop-blur-sm">
+    <div class="glass rounded-2xl p-8 text-center max-w-md mx-4 shadow-2xl">
+      <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+        <i class="fas fa-check text-white text-2xl"></i>
+      </div>
+      <h3 class="text-xl font-semibold text-white mb-2">Success!</h3>
+      <p id="successMessage" class="text-white/80 mb-6">Operation completed successfully.</p>
+      <button id="closeSuccessModal" class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-300">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- Error Modal -->
+  <div id="errorModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden backdrop-blur-sm">
+    <div class="glass rounded-2xl p-8 text-center max-w-md mx-4 shadow-2xl">
+      <div class="w-16 h-16 bg-gradient-to-r from-red-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+        <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
+      </div>
+      <h3 class="text-xl font-semibold text-white mb-2">Error</h3>
+      <p id="errorMessage" class="text-white/80 mb-6">An error occurred. Please try again.</p>
+      <button id="closeErrorModal" class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-300">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <script src="resume-builder-updated.js"></script>
+  
+  <script>
+    // Navbar scroll effect and progress indicator
+    window.addEventListener('scroll', function() {
+      const navbar = document.getElementById('navbar');
+      const scrollIndicator = document.getElementById('scroll-indicator');
+      
+      // Navbar scroll effect
+      if (window.scrollY > 50) {
+        navbar.classList.add('navbar-scrolled');
+      } else {
+        navbar.classList.remove('navbar-scrolled');
+      }
+      
+      // Progress indicator
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollProgress = (scrollTop / scrollHeight) * 100;
+      scrollIndicator.style.transform = `scaleX(${scrollProgress / 100})`;
+    });
+
+    // Add floating animation to template cards
+    document.addEventListener('DOMContentLoaded', function() {
+      const templateCards = document.querySelectorAll('.template-card');
+      templateCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.classList.add('floating-animation');
+      });
+
+      // Add fade-in animation to form sections
+      const formSections = document.querySelectorAll('.form-section');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, { threshold: 0.1 });
+
+      formSections.forEach(section => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(30px)';
+        section.style.transition = 'all 0.6s ease-out';
+        observer.observe(section);
+      });
+    });
+  </script>
+</body>
+</html>

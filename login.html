@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | NextBloom - AI-Powered Learning Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .glass {
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    
+    .hero-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%23ffffff" stop-opacity="0.1"/><stop offset="100%" stop-color="%23ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="200" cy="200" r="100" fill="url(%23a)"/><circle cx="800" cy="300" r="150" fill="url(%23a)"/><circle cx="400" cy="700" r="120" fill="url(%23a)"/></svg>');
+      opacity: 0.3;
+    }
+    
+    .floating-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .pulse-glow {
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulseGlow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(102, 126, 234, 0.8);
+      }
+    }
+    
+    .slide-in {
+      animation: slideIn 0.8s ease-out;
+    }
+    
+    @keyframes slideIn {
+      0% {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    /* Smooth transitions for better UX */
+    input, button {
+      transition: all 0.2s ease;
+    }
+    
+    /* Focus improvements */
+    input:focus, button:focus {
+      outline: none;
+      transform: translateY(-1px);
+    }
+    
+    /* Loading state */
+    .loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 640px) {
+      .glass {
+        margin: 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="hero-bg min-h-screen flex items-center justify-center px-4 py-4 sm:py-6 relative overflow-x-hidden overflow-y-auto">
+
+  <!-- Floating Elements -->
+  <div class="absolute -top-20 -left-20 w-40 h-40 bg-white/10 rounded-full floating-animation"></div>
+  <div class="absolute -bottom-20 -right-20 w-60 h-60 bg-white/5 rounded-full floating-animation" style="animation-delay: -3s;"></div>
+  <div class="absolute top-1/4 -right-10 w-32 h-32 bg-white/5 rounded-full floating-animation" style="animation-delay: -1s;"></div>
+  <div class="absolute bottom-1/4 -left-10 w-24 h-24 bg-white/10 rounded-full floating-animation" style="animation-delay: -2s;"></div>
+
+  <div class="glass p-4 sm:p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-sm sm:max-w-md mx-auto relative z-10 slide-in my-4">
+    <!-- Brand Header -->
+    <div class="text-center mb-6 sm:mb-8">
+      <div class="flex items-center justify-center space-x-2 sm:space-x-3 mb-4">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+          <i class="fas fa-graduation-cap text-white text-lg sm:text-xl"></i>
+        </div>
+        <h1 class="text-xl sm:text-2xl font-bold text-white">NextBloom</h1>
+      </div>
+      <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">Welcome Back!</h2>
+      <p class="text-white/80 text-sm sm:text-base">Sign in to continue your learning journey</p>
+    </div>
+
+    <form id="loginForm" class="space-y-4 sm:space-y-6">
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-white/90 mb-2">
+          <i class="fas fa-envelope mr-2"></i>Email Address
+        </label>
+        <input type="email" id="email" name="email" required 
+               class="w-full px-3 py-2 sm:px-4 sm:py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-white/50 transition-all duration-300 text-sm sm:text-base"
+               placeholder="john.doe@example.com">
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-white/90 mb-2">
+          <i class="fas fa-lock mr-2"></i>Password
+        </label>
+        <div class="relative">
+          <input type="password" id="password" name="password" required 
+                 class="w-full px-3 py-2 sm:px-4 sm:py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-white/50 transition-all duration-300 text-sm sm:text-base"
+                 placeholder="Enter your password">
+          <button type="button" id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white transition-colors">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Remember Me & Forgot Password -->
+      <div class="flex items-center justify-between text-sm">
+        <label class="flex items-center text-white/80">
+          <input type="checkbox" id="remember" class="mr-2 h-4 w-4 text-purple-500 focus:ring-purple-500 border-white/30 rounded bg-white/20">
+          Remember me
+        </label>
+        <a href="#" class="text-white/80 hover:text-white transition-colors">Forgot password?</a>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="pt-2">
+        <button type="submit" class="w-full bg-white text-purple-600 py-2 sm:py-3 px-4 rounded-xl font-bold text-sm sm:text-base hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 pulse-glow focus:outline-none focus:ring-4 focus:ring-white/50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+          <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+        </button>
+      </div>
+
+      <!-- Error and Success Messages -->
+      <div id="errorMsg" class="bg-red-500/20 border border-red-500/30 text-red-100 px-4 py-3 rounded-xl text-sm text-center hidden">
+        <i class="fas fa-exclamation-triangle mr-2"></i>
+        <span></span>
+      </div>
+      
+      <div id="successMsg" class="bg-green-500/20 border border-green-500/30 text-green-100 px-4 py-3 rounded-xl text-sm text-center hidden">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span></span>
+      </div>
+    </form>
+
+    <!-- Social Login Options -->
+    <div class="mt-6">
+      <div class="relative">
+        <div class="absolute inset-0 flex items-center">
+          <div class="w-full border-t border-white/20"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+          <span class="px-2 bg-transparent text-white/60">Or continue with</span>
+        </div>
+      </div>
+      
+      <div class="mt-4 grid grid-cols-2 gap-3">
+        <button type="button" class="flex items-center justify-center px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-white/80 hover:bg-white/20 transition-all duration-300 text-sm">
+          <i class="fab fa-google mr-2"></i>Google
+        </button>
+        <button type="button" class="flex items-center justify-center px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-white/80 hover:bg-white/20 transition-all duration-300 text-sm">
+          <i class="fab fa-github mr-2"></i>GitHub
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="mt-6 text-center space-y-2">
+      <p class="text-white/80 text-sm">
+        Don't have an account? 
+        <a href="signup.html" class="text-white font-medium hover:text-white/80 transition-colors">Sign up here</a>
+      </p>
+      <p class="text-white/60 text-sm">
+        <a href="index.html" class="hover:text-white transition-colors">
+          <i class="fas fa-arrow-left mr-2"></i>Back to Home
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // DOM Elements
+    const loginForm = document.getElementById("loginForm");
+    const errorMsg = document.getElementById("errorMsg");
+    const successMsg = document.getElementById("successMsg");
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("password");
+
+    // Password toggle functionality
+    togglePassword.addEventListener("click", () => {
+      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+      togglePassword.innerHTML = type === "password" ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+
+    // Message functions
+    function showError(message) {
+      const errorSpan = errorMsg.querySelector('span');
+      errorSpan.textContent = message;
+      errorMsg.classList.remove("hidden");
+      successMsg.classList.add("hidden");
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        errorMsg.classList.add("hidden");
+      }, 5000);
+    }
+
+    function showSuccess(message) {
+      const successSpan = successMsg.querySelector('span');
+      successSpan.textContent = message;
+      successMsg.classList.remove("hidden");
+      errorMsg.classList.add("hidden");
+    }
+
+    // Network connectivity check
+    function checkNetworkConnectivity() {
+      return navigator.onLine;
+    }
+
+    // Form submission with backend API
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      // Check network connectivity first
+      if (!checkNetworkConnectivity()) {
+        showError("No internet connection. Please check your network and try again.");
+        return;
+      }
+      
+      // Get form data
+      const formData = {
+        email: document.getElementById("email").value.trim(),
+        password: document.getElementById("password").value,
+        remember: document.getElementById("remember").checked
+      };
+
+      // Client-side validation
+      if (!formData.email) {
+        showError("Email is required");
+        return;
+      }
+
+      if (!formData.password) {
+        showError("Password is required");
+        return;
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        showError("Please enter a valid email address");
+        return;
+      }
+
+      // Show loading state
+      const submitBtn = loginForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Signing In...';
+      submitBtn.disabled = true;
+      submitBtn.classList.add('loading');
+
+      try {
+        // Make API call to backend
+        const response = await fetch('http://localhost:5000/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          // Auto-login the user
+          localStorage.setItem("userLoggedIn", "true");
+          localStorage.setItem("userEmail", data.user.email);
+          localStorage.setItem("userName", `${data.user.firstName} ${data.user.lastName}`);
+          localStorage.setItem("userData", JSON.stringify(data.user));
+          
+          // Set remember me preference
+          if (formData.remember) {
+            localStorage.setItem("rememberLogin", "true");
+          }
+          
+          showSuccess("Login successful! Redirecting to homepage...");
+          
+          // Success feedback
+          submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Success! Redirecting...';
+          submitBtn.className = submitBtn.className.replace('text-purple-600', 'text-green-600');
+          
+          // Show success notification
+          showNotification('🎉 Welcome back to NextBloom!', 'success');
+          
+          setTimeout(() => {
+            // Redirect to homepage
+            window.location.href = 'index.html?login=success';
+          }, 1500);
+          
+        } else {
+          showError(data.message || "Invalid email or password. Please try again.");
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('loading');
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        showError("Unable to connect to server. Please check your connection and try again.");
+        
+        // Reset button state
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('loading');
+      }
+    });
+
+    // Notification function
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+      
+      notification.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300`;
+      notification.innerHTML = `
+        <div class="flex items-center space-x-2">
+          <span>${message}</span>
+          <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Slide in
+      setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+      }, 100);
+      
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        if (notification.parentElement) {
+          notification.style.transform = 'translateX(100%)';
+          setTimeout(() => {
+            if (notification.parentElement) {
+              notification.remove();
+            }
+          }, 300);
+        }
+      }, 5000);
+    }
+
+    // Input validation
+    const inputs = loginForm.querySelectorAll('input[required]');
+    inputs.forEach(input => {
+      input.addEventListener('blur', function() {
+        const value = this.value.trim();
+        const isEmpty = value === '';
+        const isRequired = this.hasAttribute('required');
+        
+        if (isEmpty && isRequired) {
+          this.classList.add('border-red-400');
+          this.classList.remove('border-green-400');
+        } else if (!isEmpty) {
+          this.classList.add('border-green-400');
+          this.classList.remove('border-red-400');
+        } else {
+          this.classList.remove('border-red-400', 'border-green-400');
+        }
+      });
+      
+      input.addEventListener('focus', function() {
+        this.classList.remove('border-red-400');
+      });
+    });
+
+    // Enter key navigation
+    const formInputs = Array.from(loginForm.querySelectorAll('input, button[type="submit"]'));
+    
+    loginForm.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const currentIndex = formInputs.indexOf(e.target);
+        
+        if (e.target.type === 'submit') {
+          return;
+        }
+        
+        e.preventDefault();
+        const nextInput = formInputs[currentIndex + 1];
+        if (nextInput && nextInput.type !== 'submit') {
+          nextInput.focus();
+        } else if (nextInput && nextInput.type === 'submit') {
+          nextInput.focus();
+        }
+      }
+    });
+
+    // Check if user is already logged in
+    window.addEventListener('load', () => {
+      const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+      if (isLoggedIn) {
+        showNotification('You are already logged in. Redirecting to homepage...', 'info');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 2000);
+      }
+    });
+  </script>
+
+</body>
+</html>

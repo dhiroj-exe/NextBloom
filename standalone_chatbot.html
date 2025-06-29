@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextBloom AI Career Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .chatbot-container {
+            width: 100%;
+            max-width: 800px;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .bot-avatar {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .bot-info h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .bot-info p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .language-selector {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .voice-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .voice-toggle.active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8fafc;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.bot .message-content::before {
+            content: '🤖';
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+        }
+
+        .suggestions {
+            margin-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suggestion-btn {
+            background: #e2e8f0;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #4a5568;
+        }
+
+        .suggestion-btn:hover {
+            background: #cbd5e0;
+            transform: translateY(-2px);
+        }
+
+        .resources {
+            margin-top: 15px;
+        }
+
+        .resource-item {
+            background: #f0fff4;
+            border: 1px solid #9ae6b4;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .resource-item:hover {
+            background: #e6fffa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(154, 230, 180, 0.3);
+        }
+
+        .resource-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .resource-desc {
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        .resource-link {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 12px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .message-actions {
+            margin-top: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid #e2e8f0;
+            color: #4a5568;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #f7fafc;
+            border-color: #cbd5e0;
+        }
+
+        .typing-text {
+            font-size: 14px;
+            color: #718096;
+            font-style: italic;
+        }
+
+        .conversation-starter {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .conversation-starter:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            transform: translateY(-2px);
+        }
+
+        .conversation-starter h4 {
+            color: #667eea;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .conversation-starter p {
+            color: #4a5568;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .chat-stats {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #4a5568;
+            backdrop-filter: blur(10px);
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #a0aec0;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .message.user .message-time {
+            text-align: left;
+        }
+
+        .smart-suggestions {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .smart-suggestions h4 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .progress-indicator {
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 20px;
+            border-bottom-left-radius: 5px;
+            max-width: 70%;
+            border: 1px solid #e2e8f0;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #cbd5e0;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .voice-btn {
+            background: #48bb78;
+            color: white;
+        }
+
+        .voice-btn:hover {
+            background: #38a169;
+            transform: scale(1.1);
+        }
+
+        .voice-btn.listening {
+            background: #e53e3e;
+            animation: pulse 1s infinite;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #4a5568;
+        }
+
+        .welcome-message h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .welcome-message p {
+            margin-bottom: 20px;
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .quick-action {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .quick-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #48bb78;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            max-width: 300px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: #e53e3e;
+        }
+
+        .notification.warning {
+            background: #ed8936;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chatbot-container {
+                height: 100vh;
+                border-radius: 0;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .header-controls {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .quick-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chatbot-container">
+        <!-- Header -->
+        <div class="chatbot-header">
+            <div class="header-left">
+                <div class="bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="bot-info">
+                    <h1>NextBloom AI Assistant</h1>
+                    <p>Your multilingual career guidance companion</p>
+                </div>
+            </div>
+            <div class="header-controls">
+                <select class="language-selector" id="languageSelect">
+                    <option value="en">🇺🇸 English</option>
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="hi">🇮🇳 हिंदी</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                </select>
+                <button class="voice-toggle" id="voiceToggle" title="Toggle Voice Mode">
+                    <i class="fas fa-volume-up"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="welcome-message" id="welcomeMessage">
+                <h2>👋 Welcome to NextBloom AI Assistant!</h2>
+                <p>I'm here to help you with career guidance, learning paths, and emotional support. You can type or speak to me in multiple languages!</p>
+                
+                <div class="quick-actions">
+                    <button class="quick-action" onclick="sendQuickMessage('I want to learn web development')">
+                        💻 Learn Web Development
+                    </button>
+                    <button class="quick-action" onclick="sendQuickMessage('I need career guidance')">
+                        🎯 Career Guidance
+                    </button>
+                    <button class="quick-action" onclick="sendQuickMessage('I feel anxious about my future')">
+                        💪 Emotional Support
+                    </button>
+                    <button class="quick-action" onclick="sendQuickMessage('Show me learning resources')">
+                        📚 Learning Resources
+                    </button>
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typingIndicator">
+                <span>🤖</span>
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+                <span class="typing-text">AI is thinking...</span>
+            </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Type your message or click 🎤 to speak (auto-enables voice mode)...">
+            <div class="input-buttons">
+                <button class="input-btn voice-btn" id="voiceBtn" title="Click to speak (auto-enables voice mode)">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="input-btn send-btn" id="sendBtn" title="Send Message">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        class StandaloneChatbot {
+            constructor() {
+                this.currentLanguage = 'en';
+                this.voiceMode = false;
+                this.isListening = false;
+                this.isSpeaking = false;
+                this.recognition = null;
+                this.synthesis = window.speechSynthesis;
+                this.voices = [];
+                this.conversationHistory = [];
+                this.userProfile = {
+                    name: null,
+                    interests: [],
+                    goals: [],
+                    experience: null,
+                    preferredLearningStyle: null
+                };
+                this.sessionStartTime = new Date();
+                this.messageCount = 0;
+                this.currentContext = null;
+                this.typingSpeed = 50; // ms per character
+                this.lastVoiceInputTime = 0; // Track last voice input time
+                this.userIsTyping = false; // Track if user is manually typing
+                
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.initSpeechRecognition();
+                this.loadVoices();
+                this.updateChatStats();
+                this.addConversationStarters();
+                this.showNotification('🎉 AI Assistant loaded! Try voice input and multilingual support!', 'success');
+                
+                // Auto-greet after a short delay
+                setTimeout(() => {
+                    this.addSmartGreeting();
+                }, 2000);
+            }
+
+            setupEventListeners() {
+                // Send button
+                document.getElementById('sendBtn').addEventListener('click', () => {
+                    this.sendMessage();
+                });
+
+                // Enter key
+                document.getElementById('chatInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendMessage();
+                    }
+                });
+
+                // Voice button
+                document.getElementById('voiceBtn').addEventListener('click', () => {
+                    this.toggleVoiceInput();
+                });
+
+                // Voice mode toggle
+                document.getElementById('voiceToggle').addEventListener('click', () => {
+                    this.toggleVoiceMode();
+                });
+
+                // Language selector
+                document.getElementById('languageSelect').addEventListener('change', (e) => {
+                    this.currentLanguage = e.target.value;
+                    this.showNotification(`Language changed to ${this.getLanguageName(e.target.value)}`, 'success');
+                });
+
+                // Track typing to detect manual text input
+                document.getElementById('chatInput').addEventListener('input', () => {
+                    this.userIsTyping = true;
+                });
+
+                // Reset typing flag when input is cleared
+                document.getElementById('chatInput').addEventListener('focus', () => {
+                    if (document.getElementById('chatInput').value === '') {
+                        this.userIsTyping = false;
+                    }
+                });
+            }
+
+            initSpeechRecognition() {
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    this.recognition = new SpeechRecognition();
+                    this.recognition.continuous = false;
+                    this.recognition.interimResults = false;
+                    this.recognition.lang = this.getLanguageCode(this.currentLanguage);
+
+                    this.recognition.onstart = () => {
+                        this.isListening = true;
+                        this.updateVoiceButton();
+                    };
+
+                    this.recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        document.getElementById('chatInput').value = transcript;
+                        this.lastVoiceInputTime = Date.now(); // Track when voice input was used
+                        this.userIsTyping = false; // This was voice input, not typing
+                        this.sendMessage();
+                    };
+
+                    this.recognition.onerror = (event) => {
+                        this.showNotification('Voice recognition error. Please try again.', 'error');
+                        this.isListening = false;
+                        this.updateVoiceButton();
+                    };
+
+                    this.recognition.onend = () => {
+                        this.isListening = false;
+                        this.updateVoiceButton();
+                    };
+                } else {
+                    this.showNotification('Voice recognition not supported in this browser', 'warning');
+                }
+            }
+
+            loadVoices() {
+                this.voices = this.synthesis.getVoices();
+                if (this.voices.length === 0) {
+                    this.synthesis.onvoiceschanged = () => {
+                        this.voices = this.synthesis.getVoices();
+                    };
+                }
+            }
+
+            getLanguageCode(lang) {
+                const codes = {
+                    'en': 'en-US',
+                    'es': 'es-ES',
+                    'hi': 'hi-IN',
+                    'fr': 'fr-FR',
+                    'de': 'de-DE'
+                };
+                return codes[lang] || 'en-US';
+            }
+
+            getLanguageName(lang) {
+                const names = {
+                    'en': 'English',
+                    'es': 'Español',
+                    'hi': 'हिंदी',
+                    'fr': 'Français',
+                    'de': 'Deutsch'
+                };
+                return names[lang] || 'English';
+            }
+
+            toggleVoiceInput() {
+                if (!this.recognition) {
+                    this.showNotification('Voice recognition not available', 'error');
+                    return;
+                }
+
+                if (this.isListening) {
+                    this.recognition.stop();
+                } else {
+                    // Auto-enable voice mode when microphone is clicked
+                    if (!this.voiceMode) {
+                        this.enableVoiceMode();
+                    }
+                    this.recognition.lang = this.getLanguageCode(this.currentLanguage);
+                    this.recognition.start();
+                }
+            }
+
+            toggleVoiceMode() {
+                this.voiceMode = !this.voiceMode;
+                this.updateVoiceModeUI();
+            }
+
+            enableVoiceMode() {
+                this.voiceMode = true;
+                this.updateVoiceModeUI();
+                this.showNotification('🎤 Voice mode enabled - AI will speak responses', 'success');
+            }
+
+            disableVoiceMode() {
+                this.voiceMode = false;
+                this.updateVoiceModeUI();
+                this.showNotification('⌨️ Switched to text mode - AI responses will be silent', 'success');
+            }
+
+            updateVoiceModeUI() {
+                const toggle = document.getElementById('voiceToggle');
+                
+                if (this.voiceMode) {
+                    toggle.classList.add('active');
+                    toggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+                    toggle.title = 'Voice mode enabled - Click to disable';
+                } else {
+                    toggle.classList.remove('active');
+                    toggle.innerHTML = '<i class="fas fa-volume-off"></i>';
+                    toggle.title = 'Voice mode disabled - Click to enable';
+                }
+            }
+
+            updateVoiceButton() {
+                const voiceBtn = document.getElementById('voiceBtn');
+                if (this.isListening) {
+                    voiceBtn.classList.add('listening');
+                    voiceBtn.innerHTML = '<i class="fas fa-stop"></i>';
+                } else {
+                    voiceBtn.classList.remove('listening');
+                    voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                }
+            }
+
+            sendMessage() {
+                const input = document.getElementById('chatInput');
+                const message = input.value.trim();
+                
+                if (!message) return;
+
+                // Auto-disable voice mode when user types and sends a message
+                if (this.voiceMode && this.wasTypedMessage()) {
+                    this.disableVoiceMode();
+                }
+
+                // Hide welcome message
+                const welcomeMsg = document.getElementById('welcomeMessage');
+                if (welcomeMsg) {
+                    welcomeMsg.style.display = 'none';
+                }
+
+                // Add user message with timestamp
+                this.addMessage(message, 'user');
+                input.value = '';
+                this.userIsTyping = false; // Reset typing flag after sending
+                this.messageCount++;
+                this.updateChatStats();
+
+                // Extract user info from message
+                this.extractUserInfo(message);
+
+                // Show typing indicator with dynamic text
+                this.showTypingIndicator();
+
+                // Generate AI response with more natural timing
+                const thinkingTime = this.calculateThinkingTime(message);
+                setTimeout(() => {
+                    this.generateAIResponse(message);
+                }, thinkingTime);
+            }
+
+            wasTypedMessage() {
+                // Check if the message was typed (not from voice input)
+                const now = Date.now();
+                const timeSinceLastVoiceInput = now - (this.lastVoiceInputTime || 0);
+                
+                // Consider it typed if:
+                // 1. User was actively typing (detected input events)
+                // 2. More than 3 seconds since last voice input
+                return this.userIsTyping || timeSinceLastVoiceInput > 3000;
+            }
+
+            addMessage(text, sender, showActions = false) {
+                const messagesContainer = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                
+                const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const actionsHtml = showActions && sender === 'bot' ? `
+                    <div class="message-actions">
+                        <button class="action-btn" onclick="chatbot.copyMessage(this)">📋 Copy</button>
+                        <button class="action-btn" onclick="chatbot.likeMessage(this)">👍 Helpful</button>
+                        <button class="action-btn" onclick="chatbot.askFollowUp(this)">❓ Tell me more</button>
+                    </div>
+                ` : '';
+                
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        ${text}
+                        <div class="message-time">${timestamp}</div>
+                        ${actionsHtml}
+                    </div>
+                `;
+                
+                messagesContainer.appendChild(messageDiv);
+                this.smoothScrollToBottom();
+            }
+
+            addMessageWithSuggestions(text, suggestions = [], resources = []) {
+                const messagesContainer = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message bot';
+                
+                const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                let suggestionsHtml = '';
+                if (suggestions.length > 0) {
+                    suggestionsHtml = `
+                        <div class="suggestions">
+                            ${suggestions.map(s => `<button class="suggestion-btn" onclick="sendQuickMessage('${s}')">${s}</button>`).join('')}
+                        </div>
+                    `;
+                }
+
+                let resourcesHtml = '';
+                if (resources.length > 0) {
+                    resourcesHtml = `
+                        <div class="resources">
+                            <strong>📚 Recommended Resources:</strong>
+                            ${resources.map(r => `
+                                <div class="resource-item" onclick="chatbot.openResource('${r.url || '#'}')">
+                                    <div class="resource-title">${r.name}</div>
+                                    <div class="resource-desc">${r.description}</div>
+                                    ${r.url ? `<div class="resource-link">🔗 Click to open</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+                
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        ${text}
+                        ${suggestionsHtml}
+                        ${resourcesHtml}
+                        <div class="message-time">${timestamp}</div>
+                        <div class="message-actions">
+                            <button class="action-btn" onclick="chatbot.copyMessage(this)">📋 Copy</button>
+                            <button class="action-btn" onclick="chatbot.likeMessage(this)">👍 Helpful</button>
+                            <button class="action-btn" onclick="chatbot.askFollowUp(this)">❓ Tell me more</button>
+                        </div>
+                    </div>
+                `;
+                
+                messagesContainer.appendChild(messageDiv);
+                this.smoothScrollToBottom();
+            }
+
+            showTypingIndicator() {
+                const indicator = document.getElementById('typingIndicator');
+                const typingTexts = [
+                    'AI is thinking...',
+                    'Analyzing your question...',
+                    'Preparing response...',
+                    'Finding the best advice...',
+                    'Crafting personalized guidance...'
+                ];
+                
+                const randomText = typingTexts[Math.floor(Math.random() * typingTexts.length)];
+                indicator.querySelector('.typing-text').textContent = randomText;
+                indicator.style.display = 'flex';
+                this.smoothScrollToBottom();
+            }
+
+            hideTypingIndicator() {
+                document.getElementById('typingIndicator').style.display = 'none';
+            }
+
+            smoothScrollToBottom() {
+                const messagesContainer = document.getElementById('chatMessages');
+                messagesContainer.scrollTo({
+                    top: messagesContainer.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+
+            calculateThinkingTime(message) {
+                // More natural thinking time based on message complexity
+                const baseTime = 800;
+                const wordCount = message.split(' ').length;
+                const complexityBonus = wordCount > 10 ? 500 : 0;
+                const randomDelay = Math.random() * 1000;
+                return baseTime + complexityBonus + randomDelay;
+            }
+
+            extractUserInfo(message) {
+                const msg = message.toLowerCase();
+                
+                // Extract name
+                const nameMatch = msg.match(/(?:my name is|i'm|i am|call me) ([a-zA-Z]+)/);
+                if (nameMatch && !this.userProfile.name) {
+                    this.userProfile.name = nameMatch[1];
+                }
+                
+                // Extract interests
+                const interestKeywords = ['interested in', 'love', 'passionate about', 'enjoy', 'like'];
+                interestKeywords.forEach(keyword => {
+                    if (msg.includes(keyword)) {
+                        const afterKeyword = msg.split(keyword)[1];
+                        if (afterKeyword) {
+                            this.userProfile.interests.push(afterKeyword.trim().split(' ').slice(0, 3).join(' '));
+                        }
+                    }
+                });
+                
+                // Extract experience level
+                if (msg.includes('beginner') || msg.includes('new to') || msg.includes('just started')) {
+                    this.userProfile.experience = 'beginner';
+                } else if (msg.includes('experienced') || msg.includes('years of') || msg.includes('professional')) {
+                    this.userProfile.experience = 'experienced';
+                }
+            }
+
+            updateChatStats() {
+                const duration = Math.floor((new Date() - this.sessionStartTime) / 1000 / 60);
+                const statsHtml = `💬 ${this.messageCount} messages • ⏱️ ${duration}m`;
+                
+                let statsDiv = document.querySelector('.chat-stats');
+                if (!statsDiv) {
+                    statsDiv = document.createElement('div');
+                    statsDiv.className = 'chat-stats';
+                    document.querySelector('.chatbot-container').appendChild(statsDiv);
+                }
+                statsDiv.innerHTML = statsHtml;
+            }
+
+            addConversationStarters() {
+                const starters = [
+                    {
+                        title: "🚀 Career Transition",
+                        desc: "I want to change my career path",
+                        message: "I'm thinking about changing my career but don't know where to start"
+                    },
+                    {
+                        title: "📈 Skill Development",
+                        desc: "What skills should I learn?",
+                        message: "What are the most in-demand skills I should focus on learning?"
+                    },
+                    {
+                        title: "💼 Job Search Help",
+                        desc: "Help me find the right job",
+                        message: "I need help with my job search strategy and interview preparation"
+                    }
+                ];
+
+                const welcomeMsg = document.getElementById('welcomeMessage');
+                if (welcomeMsg) {
+                    const startersHtml = starters.map(starter => `
+                        <div class="conversation-starter" onclick="sendQuickMessage('${starter.message}')">
+                            <h4>${starter.title}</h4>
+                            <p>${starter.desc}</p>
+                        </div>
+                    `).join('');
+                    
+                    welcomeMsg.innerHTML += `
+                        <div class="smart-suggestions">
+                            <h4>💡 Popular Topics</h4>
+                            ${startersHtml}
+                        </div>
+                    `;
+                }
+            }
+
+            addSmartGreeting() {
+                const greetings = {
+                    en: [
+                        "Hi there! 👋 I'm your AI career companion. What brings you here today?",
+                        "Welcome! 🌟 I'm here to help you navigate your career journey. What's on your mind?",
+                        "Hello! 🎯 Ready to explore new opportunities together? What would you like to discuss?"
+                    ],
+                    es: [
+                        "¡Hola! 👋 Soy tu compañero de carrera con IA. ¿Qué te trae aquí hoy?",
+                        "¡Bienvenido! 🌟 Estoy aquí para ayudarte a navegar tu viaje profesional. ¿En qué piensas?"
+                    ],
+                    hi: [
+                        "नमस्ते! 👋 मैं आपका AI करियर साथी हूं। आज आप यहां क्यों आए हैं?",
+                        "स्वागत है! 🌟 मैं आपकी करियर यात्रा में मदद करने के लिए यहां हूं।"
+                    ]
+                };
+
+                const langGreetings = greetings[this.currentLanguage] || greetings.en;
+                const randomGreeting = langGreetings[Math.floor(Math.random() * langGreetings.length)];
+                
+                setTimeout(() => {
+                    this.addMessage(randomGreeting, 'bot', true);
+                }, 500);
+            }
+
+            copyMessage(button) {
+                const messageContent = button.closest('.message-content');
+                const text = messageContent.querySelector('div:first-child').textContent;
+                navigator.clipboard.writeText(text).then(() => {
+                    this.showNotification('Message copied to clipboard! 📋', 'success');
+                });
+            }
+
+            likeMessage(button) {
+                button.innerHTML = '✅ Thanks!';
+                button.disabled = true;
+                this.showNotification('Glad I could help! 😊', 'success');
+            }
+
+            askFollowUp(button) {
+                const followUps = [
+                    "Can you give me more specific examples?",
+                    "What would be the next steps?",
+                    "How can I get started with this?",
+                    "What resources would you recommend?",
+                    "Can you elaborate on this topic?"
+                ];
+                const randomFollowUp = followUps[Math.floor(Math.random() * followUps.length)];
+                document.getElementById('chatInput').value = randomFollowUp;
+                this.sendMessage();
+            }
+
+            openResource(url) {
+                if (url && url !== '#') {
+                    window.open(url, '_blank');
+                } else {
+                    this.showNotification('Resource link not available', 'warning');
+                }
+            }
+
+            generateAIResponse(message) {
+                this.hideTypingIndicator();
+                
+                const response = this.getContextualResponse(message);
+                
+                // Add personalization if we know the user's name
+                if (this.userProfile.name && Math.random() > 0.7) {
+                    response.text = response.text.replace(/^(Hi|Hello|Hey)/, `Hi ${this.userProfile.name}`);
+                }
+                
+                if (response.suggestions || response.resources) {
+                    this.addMessageWithSuggestions(response.text, response.suggestions, response.resources);
+                } else {
+                    this.addMessage(response.text, 'bot', true);
+                }
+
+                // Add follow-up suggestions based on context
+                if (response.followUp) {
+                    setTimeout(() => {
+                        this.addSmartSuggestions(response.followUp);
+                    }, 2000);
+                }
+
+                // Speak response if voice mode is enabled
+                if (this.voiceMode) {
+                    setTimeout(() => {
+                        this.speakText(response.text);
+                    }, 500);
+                }
+
+                // Store in conversation history
+                this.conversationHistory.push({
+                    user: message,
+                    bot: response.text,
+                    timestamp: new Date(),
+                    context: this.currentContext
+                });
+            }
+
+            addSmartSuggestions(suggestions) {
+                const messagesContainer = document.getElementById('chatMessages');
+                const suggestionsDiv = document.createElement('div');
+                suggestionsDiv.className = 'smart-suggestions';
+                
+                suggestionsDiv.innerHTML = `
+                    <h4>💡 You might also want to know:</h4>
+                    <div class="suggestions">
+                        ${suggestions.map(s => `<button class="suggestion-btn" onclick="sendQuickMessage('${s}')">${s}</button>`).join('')}
+                    </div>
+                `;
+                
+                messagesContainer.appendChild(suggestionsDiv);
+                this.smoothScrollToBottom();
+            }
+
+            getContextualResponse(message) {
+                const msg = message.toLowerCase();
+                const lang = this.currentLanguage;
+
+                // Analyze conversation context and user intent
+                const analysis = this.analyzeUserIntent(message, msg);
+                this.currentContext = analysis.context;
+
+                // Update user profile based on conversation
+                this.updateUserProfileFromMessage(msg, analysis);
+
+                // Generate contextually aware response
+                return this.generateIntelligentResponse(message, msg, analysis, lang);
+            }
+
+            analyzeUserIntent(originalMessage, lowerMessage) {
+                const analysis = {
+                    context: 'general',
+                    intent: 'information',
+                    emotion: 'neutral',
+                    urgency: 'normal',
+                    specificity: 'general',
+                    keywords: [],
+                    entities: {
+                        skills: [],
+                        industries: [],
+                        roles: [],
+                        companies: [],
+                        locations: []
+                    }
+                };
+
+                // Detect context
+                analysis.context = this.detectAdvancedContext(lowerMessage);
+                
+                // Detect intent
+                analysis.intent = this.detectUserIntent(lowerMessage);
+                
+                // Detect emotional state
+                analysis.emotion = this.detectEmotion(lowerMessage);
+                
+                // Detect urgency
+                analysis.urgency = this.detectUrgency(lowerMessage);
+                
+                // Extract entities
+                analysis.entities = this.extractEntities(originalMessage, lowerMessage);
+                
+                // Extract key phrases
+                analysis.keywords = this.extractKeywords(lowerMessage);
+
+                return analysis;
+            }
+
+            generateIntelligentResponse(originalMessage, lowerMessage, analysis, lang) {
+                // Choose response strategy based on analysis
+                if (analysis.emotion === 'stressed' || analysis.emotion === 'anxious') {
+                    return this.getEmpatheticResponse(analysis, lang);
+                }
+
+                if (analysis.intent === 'specific_advice' && analysis.entities.skills.length > 0) {
+                    return this.getSkillSpecificResponse(analysis, lang);
+                }
+
+                if (analysis.context === 'career_transition' && this.conversationHistory.length > 2) {
+                    return this.getPersonalizedCareerResponse(analysis, lang);
+                }
+
+                // Use conversation history for context
+                if (this.conversationHistory.length > 0) {
+                    return this.getContextAwareResponse(analysis, lang);
+                }
+
+                // Fallback to enhanced category responses
+                return this.getCategoryResponse(analysis, lang);
+            }
+
+            detectAdvancedContext(msg) {
+                // Advanced context detection with multiple keywords and patterns
+                const contexts = {
+                    'career_transition': ['change career', 'switch jobs', 'new field', 'transition', 'pivot', 'different industry'],
+                    'job_search': ['looking for job', 'find work', 'job hunting', 'apply', 'hiring', 'recruitment', 'job board'],
+                    'interview': ['interview', 'interviewing', 'job interview', 'interview prep', 'interview questions'],
+                    'resume': ['resume', 'cv', 'curriculum vitae', 'application', 'portfolio'],
+                    'salary': ['salary', 'pay', 'wage', 'compensation', 'money', 'income', 'raise', 'negotiate'],
+                    'networking': ['network', 'connect', 'linkedin', 'professional contacts', 'industry events', 'meetup'],
+                    'skill_development': ['learn', 'skill', 'course', 'training', 'certification', 'education', 'study'],
+                    'technology': ['programming', 'coding', 'software', 'web development', 'data science', 'ai', 'machine learning'],
+                    'entrepreneurship': ['startup', 'business', 'entrepreneur', 'own business', 'freelance', 'consulting'],
+                    'work_life_balance': ['work life balance', 'stress', 'burnout', 'remote work', 'flexible', 'hours'],
+                    'leadership': ['management', 'leader', 'team', 'supervise', 'promote', 'leadership'],
+                    'education': ['degree', 'university', 'college', 'school', 'graduate', 'masters', 'phd', 'certification']
+                };
+
+                for (const [context, keywords] of Object.entries(contexts)) {
+                    if (keywords.some(keyword => msg.includes(keyword))) {
+                        return context;
+                    }
+                }
+                return 'general';
+            }
+
+            detectUserIntent(msg) {
+                if (msg.includes('how to') || msg.includes('how do i') || msg.includes('how can i')) return 'how_to';
+                if (msg.includes('what is') || msg.includes('what are') || msg.includes('explain')) return 'explanation';
+                if (msg.includes('should i') || msg.includes('recommend') || msg.includes('advice')) return 'advice';
+                if (msg.includes('help me') || msg.includes('i need') || msg.includes('assist')) return 'assistance';
+                if (msg.includes('compare') || msg.includes('difference') || msg.includes('vs')) return 'comparison';
+                if (msg.includes('example') || msg.includes('show me') || msg.includes('demonstrate')) return 'examples';
+                if (msg.includes('step') || msg.includes('process') || msg.includes('guide')) return 'step_by_step';
+                if (msg.includes('best') || msg.includes('top') || msg.includes('recommend')) return 'recommendations';
+                return 'information';
+            }
+
+            detectEmotion(msg) {
+                const emotions = {
+                    'anxious': ['anxious', 'worried', 'nervous', 'scared', 'afraid', 'uncertain', 'confused'],
+                    'frustrated': ['frustrated', 'annoyed', 'stuck', 'difficult', 'hard', 'struggling'],
+                    'excited': ['excited', 'enthusiastic', 'eager', 'motivated', 'passionate'],
+                    'confident': ['confident', 'ready', 'prepared', 'sure', 'certain'],
+                    'stressed': ['stressed', 'overwhelmed', 'pressure', 'burnout', 'exhausted'],
+                    'hopeful': ['hope', 'optimistic', 'positive', 'looking forward', 'excited about']
+                };
+
+                for (const [emotion, keywords] of Object.entries(emotions)) {
+                    if (keywords.some(keyword => msg.includes(keyword))) {
+                        return emotion;
+                    }
+                }
+                return 'neutral';
+            }
+
+            detectUrgency(msg) {
+                const urgent = ['urgent', 'asap', 'immediately', 'right now', 'quickly', 'soon', 'deadline'];
+                const casual = ['someday', 'eventually', 'when i have time', 'in the future', 'maybe'];
+                
+                if (urgent.some(word => msg.includes(word))) return 'high';
+                if (casual.some(word => msg.includes(word))) return 'low';
+                return 'normal';
+            }
+
+            extractEntities(originalMessage, lowerMessage) {
+                const entities = {
+                    skills: [],
+                    industries: [],
+                    roles: [],
+                    companies: [],
+                    locations: []
+                };
+
+                // Common skills
+                const skills = ['javascript', 'python', 'java', 'react', 'node.js', 'sql', 'html', 'css', 'marketing', 'sales', 'design', 'management', 'leadership', 'communication', 'excel', 'powerpoint', 'photoshop', 'data analysis', 'project management'];
+                
+                // Common industries
+                const industries = ['technology', 'healthcare', 'finance', 'education', 'retail', 'manufacturing', 'consulting', 'media', 'nonprofit', 'government', 'startup', 'automotive', 'aerospace', 'pharmaceutical'];
+                
+                // Common roles
+                const roles = ['developer', 'engineer', 'manager', 'analyst', 'designer', 'consultant', 'director', 'coordinator', 'specialist', 'administrator', 'representative', 'assistant', 'intern'];
+
+                skills.forEach(skill => {
+                    if (lowerMessage.includes(skill)) entities.skills.push(skill);
+                });
+
+                industries.forEach(industry => {
+                    if (lowerMessage.includes(industry)) entities.industries.push(industry);
+                });
+
+                roles.forEach(role => {
+                    if (lowerMessage.includes(role)) entities.roles.push(role);
+                });
+
+                return entities;
+            }
+
+            extractKeywords(msg) {
+                const stopWords = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours', 'yourself', 'he', 'him', 'his', 'himself', 'she', 'her', 'hers', 'herself', 'it', 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'through', 'during', 'before', 'after', 'above', 'below', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once'];
+                
+                return msg.split(' ')
+                    .filter(word => word.length > 2 && !stopWords.includes(word))
+                    .slice(0, 5); // Top 5 keywords
+            }
+
+            updateUserProfileFromMessage(msg, analysis) {
+                // Update user interests based on mentioned skills/industries
+                if (analysis.entities.skills.length > 0) {
+                    analysis.entities.skills.forEach(skill => {
+                        if (!this.userProfile.interests.includes(skill)) {
+                            this.userProfile.interests.push(skill);
+                        }
+                    });
+                }
+
+                // Detect experience level from language patterns
+                if (msg.includes('beginner') || msg.includes('new to') || msg.includes('just started') || msg.includes('learning')) {
+                    this.userProfile.experience = 'beginner';
+                } else if (msg.includes('experienced') || msg.includes('years of') || msg.includes('senior') || msg.includes('expert')) {
+                    this.userProfile.experience = 'experienced';
+                } else if (msg.includes('some experience') || msg.includes('intermediate') || msg.includes('familiar with')) {
+                    this.userProfile.experience = 'intermediate';
+                }
+            }
+
+            isPersonalQuery(msg) {
+                const keywords = ['who are you', 'what are you', 'tell me about yourself', 'your name', 'how old', 'where are you from'];
+                return keywords.some(keyword => msg.includes(keyword));
+            }
+
+            isJobSearchQuery(msg) {
+                const keywords = ['job search', 'find job', 'interview', 'resume', 'cv', 'application', 'hiring', 'recruitment'];
+                return keywords.some(keyword => msg.includes(keyword));
+            }
+
+            isSalaryQuery(msg) {
+                const keywords = ['salary', 'pay', 'wage', 'compensation', 'money', 'income', 'earning'];
+                return keywords.some(keyword => msg.includes(keyword));
+            }
+
+            isNetworkingQuery(msg) {
+                const keywords = ['network', 'connect', 'linkedin', 'professional contacts', 'meet people', 'industry events'];
+                return keywords.some(keyword => msg.includes(keyword));
+            }
+
+            isCareerQuery(msg) {
+                const keywords = ['career', 'job', 'work', 'profession', 'guidance', 'carrera', 'trabajo', 'करियर', 'काम', 'carrière', 'travail', 'beruf', 'arbeit'];
+                return keywords.some(keyword => msg.includes(keyword));
+            }
+
+            isEmotionalQuery(msg) {
+                const keywords = ['anxious', 'worried', 'scared', 'sad', 'depressed', 'help', 'support', 'ansioso', 'triste', 'ayuda', 'चिंतित', 'परेशान', 'मदद', 'anxieux', 'triste', 'aide', 'ängstlich', 'traurig', 'hilfe'];
+                return keywords.some(keyword => msg.includes(keyword));
+            }
+
+            isLearningQuery(msg) {
+                const keywords = ['learn', 'study', 'course', 'resource', 'tutorial', 'aprender', 'estudiar', 'curso', 'सीखना', 'पढ़ाई', 'कोर्स', 'apprendre', 'étudier', 'cours', 'lernen', 'studieren', 'kurs'];
+                return keywords.some(keyword => msg.includes(keyword));
+            }
+
+            isTechQuery(msg) {
+                const keywords = ['programming', 'coding', 'web development', 'javascript', 'python', 'html', 'css', 'programación', 'desarrollo web', 'प्रोग्रामिंग', 'वेब डेवलपमेंट', 'programmation', 'développement web', 'programmierung', 'webentwicklung'];
+                return keywords.some(keyword => msg.includes(keyword));
+            }
+
+            getPersonalResponse(msg, lang) {
+                const responses = {
+                    en: [
+                        "I'm NextBloom AI, your personal career guidance companion! 🤖 I'm here 24/7 to help you navigate your professional journey, learn new skills, and achieve your goals. Think of me as your supportive career mentor who never gets tired of helping! 😊",
+                        "Hi! I'm an AI assistant specialized in career development and personal growth. I love helping people discover their potential and find meaningful career paths. What makes me unique is that I can speak multiple languages and provide personalized guidance based on your specific situation! 🌟"
+                    ],
+                    es: [
+                        "¡Soy NextBloom AI, tu compañero personal de orientación profesional! 🤖 Estoy aquí 24/7 para ayudarte a navegar tu viaje profesional, aprender nuevas habilidades y lograr tus objetivos. ¡Piensa en mí como tu mentor de carrera que nunca se cansa de ayudar! 😊"
+                    ],
+                    hi: [
+                        "मैं NextBloom AI हूं, आपका व्यक्तिगत करियर गाइडेंस साथी! 🤖 मैं 24/7 यहां हूं आपकी प्रोफेशनल जर्नी में मदद करने के लिए। मुझे लोगों की क्षमता खोजने और सार्थक करियर पाथ खोजने में मदद करना पसंद है! 🌟"
+                    ]
+                };
+                const langResponses = responses[lang] || responses.en;
+                const randomResponse = langResponses[Math.floor(Math.random() * langResponses.length)];
+                
+                return {
+                    text: randomResponse,
+                    suggestions: ["🎯 What can you help me with?", "🚀 Tell me about career paths", "💡 How do you provide guidance?"],
+                    followUp: ["What specific career challenge are you facing?", "What field are you interested in?"]
+                };
+            }
+
+            getCareerResponse(msg, lang) {
+                const careerVariations = {
+                    en: [
+                        "I'd love to help you explore career opportunities! 🚀 Every successful career starts with understanding your strengths and interests. What specific field catches your attention?",
+                        "Career planning is exciting! 🎯 Let's discover what path aligns with your passions and skills. What industry or role interests you most?",
+                        "Great question about careers! 💼 The job market is full of opportunities for those who prepare well. What's your current situation - are you starting fresh or looking to transition?"
+                    ],
+                    es: [
+                        "¡Me encanta ayudar con carreras profesionales! 🚀 Cada carrera exitosa comienza entendiendo tus fortalezas. ¿Qué campo específico te llama la atención?",
+                        "¡La planificación de carrera es emocionante! 🎯 Descubramos qué camino se alinea con tus pasiones. ¿Qué industria te interesa más?"
+                    ],
+                    hi: [
+                        "करियर के बारे में बात करना बहुत अच्छा है! 🚀 हर सफल करियर आपकी शक्तियों को समझने से शुरू होता है। कौन सा क्षेत्र आपको दिलचस्प लगता है?",
+                        "करियर प्लानिंग रोमांचक है! 🎯 आइए देखते हैं कि कौन सा रास्ता आपके जुनून से मेल खाता है।"
+                    ]
+                };
+
+                const langResponses = careerVariations[lang] || careerVariations.en;
+                const randomText = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: randomText,
+                    suggestions: ["💻 Technology Careers", "💼 Business & Marketing", "🎨 Creative Fields", "🏥 Healthcare", "📊 Data & Analytics", "🎓 Education", "🌱 Sustainability"],
+                    resources: [
+                        { name: "Career Explorer", description: "Discover careers that match your interests and skills", url: "https://www.mynextmove.org/explore/ip" },
+                        { name: "O*NET Interest Profiler", description: "Find careers based on your interests", url: "https://www.mynextmove.org/explore/ip" },
+                        { name: "LinkedIn Career Advice", description: "Connect with professionals in your field", url: "https://www.linkedin.com/career-advice/" }
+                    ],
+                    followUp: ["What's your educational background?", "Do you prefer working with people or data?", "Are you interested in remote work opportunities?"]
+                };
+            }
+
+            getEmotionalResponse(msg, lang) {
+                const emotionalVariations = {
+                    en: [
+                        "I hear you, and I want you to know that what you're feeling is completely valid. 💙 Career uncertainty can be overwhelming, but remember - you're not alone in this journey. Many successful people have stood exactly where you are now. What's weighing on your mind the most?",
+                        "It takes courage to acknowledge these feelings, and that's already a strength! 🌟 Every career path has its ups and downs, and feeling uncertain doesn't mean you're on the wrong track. Let's work through this together - what specific concern is troubling you?",
+                        "Your feelings are completely normal and show that you care about your future - that's actually a great sign! 💪 Sometimes the most successful people are those who question and reflect. What aspect of your career journey feels most challenging right now?"
+                    ],
+                    es: [
+                        "Te escucho, y quiero que sepas que lo que sientes es completamente válido. 💙 La incertidumbre profesional puede ser abrumadora, pero recuerda: no estás solo en este viaje. ¿Qué es lo que más te preocupa?",
+                        "Se necesita valor para reconocer estos sentimientos, ¡y eso ya es una fortaleza! 🌟 Trabajemos juntos en esto - ¿qué preocupación específica te está molestando?"
+                    ],
+                    hi: [
+                        "मैं आपकी बात सुन रहा हूं, और मैं चाहता हूं कि आप जानें कि आप जो महसूस कर रहे हैं वह बिल्कुल सही है। 💙 करियर की अनिश्चितता भारी हो सकती है, लेकिन याद रखें - आप इस यात्रा में अकेले नहीं हैं।",
+                        "इन भावनाओं को स्वीकार करने में साहस लगता है, और यह पहले से ही एक शक्ति है! 🌟 आइए इस पर एक साथ काम करते हैं।"
+                    ]
+                };
+
+                const langResponses = emotionalVariations[lang] || emotionalVariations.en;
+                const randomText = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: randomText,
+                    suggestions: ["💪 Build Confidence", "🎯 Set Small Goals", "🤝 Find Support", "📈 Track Progress", "🧘 Manage Stress", "✨ Celebrate Small Wins"],
+                    resources: [
+                        { name: "Mindfulness for Career Stress", description: "Techniques to manage career anxiety", url: "https://www.headspace.com/work-life-balance" },
+                        { name: "Career Confidence Building", description: "Strategies to boost professional confidence", url: "https://www.linkedin.com/learning/topics/confidence" },
+                        { name: "Goal Setting Worksheets", description: "Tools to break down big goals into manageable steps" }
+                    ],
+                    followUp: ["What would make you feel more confident?", "What's one small step you could take today?", "Who in your life supports your career goals?"]
+                };
+            }
+
+            getLearningResponse(msg, lang) {
+                const learningVariations = {
+                    en: [
+                        "I love your enthusiasm for learning! 🚀 Continuous learning is what separates successful professionals from the rest. The best part? There are so many amazing resources available today. What skill area excites you most?",
+                        "That's fantastic! 📚 Learning new skills is like investing in your future self. Whether you're looking to advance in your current field or pivot to something new, I can help you create a strategic learning plan. What's your learning goal?",
+                        "Excellent mindset! 🌟 The most successful people are lifelong learners. With the right approach, you can master new skills faster than you think. What would you like to dive into?"
+                    ],
+                    es: [
+                        "¡Me encanta tu entusiasmo por aprender! 🚀 El aprendizaje continuo es lo que separa a los profesionales exitosos del resto. ¿Qué área de habilidades te emociona más?",
+                        "¡Eso es fantástico! 📚 Aprender nuevas habilidades es como invertir en tu futuro. ¿Cuál es tu objetivo de aprendizaje?"
+                    ],
+                    hi: [
+                        "मुझे सीखने के लिए आपका उत्साह पसंद है! 🚀 निरंतर सीखना ही सफल पेशेवरों को बाकियों से अलग करता है। कौन सा स्किल एरिया आपको सबसे ज्यादा रोमांचित करता है?",
+                        "यह शानदार है! 📚 नए स्किल्स सीखना आपके भविष्य में निवेश करने जैसा है।"
+                    ]
+                };
+
+                const langResponses = learningVariations[lang] || learningVariations.en;
+                const randomText = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: randomText,
+                    suggestions: ["🌐 Web Development", "📊 Data Science", "📱 Mobile Apps", "🎨 UI/UX Design", "💼 Digital Marketing", "🤖 AI & Machine Learning", "☁️ Cloud Computing", "🔒 Cybersecurity"],
+                    resources: [
+                        { name: "freeCodeCamp", description: "Free coding bootcamp with certificates", url: "https://www.freecodecamp.org/" },
+                        { name: "Coursera", description: "University courses online with certificates", url: "https://www.coursera.org/" },
+                        { name: "edX", description: "High-quality courses from top universities", url: "https://www.edx.org/" },
+                        { name: "Udemy", description: "Practical skills courses at affordable prices", url: "https://www.udemy.com/" },
+                        { name: "Khan Academy", description: "Free educational content for all levels", url: "https://www.khanacademy.org/" }
+                    ],
+                    followUp: ["What's your current skill level?", "How much time can you dedicate to learning?", "Do you prefer structured courses or self-paced learning?"]
+                };
+            }
+
+            getTechResponse(msg, lang) {
+                const techVariations = {
+                    en: [
+                        "Fantastic choice! 💻 Technology is one of the most exciting and rewarding fields right now. The demand for tech skills is incredible, and the opportunities are endless. Whether you want to build websites, create apps, or work with data, there's a path for you. What aspect of tech interests you most?",
+                        "You're thinking smart! 🚀 The tech industry offers not just great salaries, but also the chance to solve real problems and create innovative solutions. Plus, many tech skills can be learned online at your own pace. What's drawing you to technology?",
+                        "Perfect timing! 🌟 Technology is transforming every industry, which means tech skills are valuable everywhere. From startups to Fortune 500 companies, everyone needs tech talent. What type of tech role excites you?"
+                    ],
+                    es: [
+                        "¡Elección fantástica! 💻 La tecnología es uno de los campos más emocionantes y gratificantes en este momento. ¿Qué aspecto de la tecnología te interesa más?",
+                        "¡Estás pensando inteligentemente! 🚀 La industria tecnológica ofrece no solo grandes salarios, sino también la oportunidad de resolver problemas reales."
+                    ],
+                    hi: [
+                        "शानदार चुनाव! 💻 टेक्नोलॉजी अभी सबसे रोमांचक और फायदेमंद क्षेत्रों में से एक है। टेक्नोलॉजी का कौन सा पहलू आपको सबसे ज्यादा दिलचस्प लगता है?",
+                        "आप स्मार्ट सोच रहे हैं! 🚀 टेक इंडस्ट्री न केवल बेहतरीन सैलरी देती है, बल्कि वास्तविक समस्याओं को हल करने का मौका भी देती है।"
+                    ]
+                };
+
+                const langResponses = techVariations[lang] || techVariations.en;
+                const randomText = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: randomText,
+                    suggestions: ["🌐 Web Development", "📱 Mobile App Development", "🤖 AI & Machine Learning", "📊 Data Science", "☁️ Cloud Computing", "🔒 Cybersecurity", "🎮 Game Development", "🔧 DevOps"],
+                    resources: [
+                        { name: "freeCodeCamp", description: "Complete web development curriculum", url: "https://www.freecodecamp.org/" },
+                        { name: "MDN Web Docs", description: "Complete web development reference", url: "https://developer.mozilla.org/" },
+                        { name: "Codecademy", description: "Interactive coding lessons", url: "https://www.codecademy.com/" },
+                        { name: "GitHub", description: "Code hosting and collaboration platform", url: "https://github.com/" },
+                        { name: "Stack Overflow", description: "Programming Q&A community", url: "https://stackoverflow.com/" },
+                        { name: "LeetCode", description: "Coding interview preparation", url: "https://leetcode.com/" }
+                    ],
+                    followUp: ["Do you have any programming experience?", "Are you more interested in front-end or back-end development?", "What type of projects would you like to build?"]
+                };
+            }
+
+            getJobSearchResponse(msg, lang) {
+                const responses = {
+                    en: [
+                        "Job searching can feel overwhelming, but with the right strategy, you'll find great opportunities! 🎯 Let me help you create a winning approach. What aspect of job searching would you like to focus on?",
+                        "The job market is competitive, but that means there are lots of opportunities too! 💼 Success comes from being strategic and persistent. Where are you in your job search journey?"
+                    ]
+                };
+
+                const langResponses = responses[lang] || responses.en;
+                const randomText = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: randomText,
+                    suggestions: ["📝 Resume Writing", "🎤 Interview Prep", "🔍 Job Search Strategy", "💼 LinkedIn Optimization", "📧 Cover Letters"],
+                    resources: [
+                        { name: "Indeed Career Guide", description: "Comprehensive job search resources", url: "https://www.indeed.com/career-advice" },
+                        { name: "Glassdoor Interview Questions", description: "Practice with real interview questions", url: "https://www.glassdoor.com/Interview/" },
+                        { name: "Resume Templates", description: "Professional resume templates", url: "https://www.canva.com/resumes/templates/" }
+                    ],
+                    followUp: ["What type of role are you targeting?", "How long have you been job searching?", "What's your biggest challenge in the process?"]
+                };
+            }
+
+            getSalaryResponse(msg, lang) {
+                const responses = {
+                    en: [
+                        "Salary discussions are important for your career growth! 💰 Knowing your worth and market rates helps you negotiate confidently. What specific role or industry are you curious about?",
+                        "Great question about compensation! 📊 Salary research is crucial for making informed career decisions. Are you preparing for a negotiation or exploring new opportunities?"
+                    ]
+                };
+
+                const langResponses = responses[lang] || responses.en;
+                const randomText = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: randomText,
+                    suggestions: ["💼 Salary Negotiation Tips", "📊 Industry Salary Data", "🎯 How to Research Salaries", "💪 Asking for a Raise"],
+                    resources: [
+                        { name: "PayScale", description: "Salary data and compensation insights", url: "https://www.payscale.com/" },
+                        { name: "Glassdoor Salaries", description: "Employee-reported salary information", url: "https://www.glassdoor.com/Salaries/" },
+                        { name: "Salary.com", description: "Comprehensive salary and benefits data", url: "https://www.salary.com/" }
+                    ],
+                    followUp: ["What's your current experience level?", "Are you in a specific geographic area?", "What benefits matter most to you?"]
+                };
+            }
+
+            getNetworkingResponse(msg, lang) {
+                const responses = {
+                    en: [
+                        "Networking is one of the most powerful career tools! 🤝 It's not just about collecting contacts - it's about building genuine relationships. What's your networking goal?",
+                        "Building professional relationships opens so many doors! 🌟 The best opportunities often come through connections. Are you looking to expand your network in a specific industry?"
+                    ]
+                };
+
+                const langResponses = responses[lang] || responses.en;
+                const randomText = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: randomText,
+                    suggestions: ["💼 LinkedIn Networking", "🎪 Industry Events", "☕ Informational Interviews", "👥 Professional Groups", "📱 Online Communities"],
+                    resources: [
+                        { name: "LinkedIn Learning - Networking", description: "Professional networking courses", url: "https://www.linkedin.com/learning/topics/networking" },
+                        { name: "Meetup", description: "Find local professional meetups", url: "https://www.meetup.com/" },
+                        { name: "Eventbrite", description: "Discover industry events and conferences", url: "https://www.eventbrite.com/" }
+                    ],
+                    followUp: ["What industry are you in?", "Do you prefer online or in-person networking?", "What's holding you back from networking?"]
+                };
+            }
+
+            getSmartDefaultResponse(msg, lang) {
+                // Analyze the message for context clues
+                const contextClues = this.analyzeMessageContext(msg);
+                
+                const responses = {
+                    en: [
+                        `I understand you're asking about ${contextClues}. That's a great topic! 🌟 I'm here to help you navigate any career-related questions. Could you tell me more about what specifically you'd like to know?`,
+                        `Thanks for sharing that with me! 💭 I can help you explore this further. What aspect would you like to dive deeper into?`,
+                        `That's an interesting point about ${contextClues}! 🤔 I'd love to provide more targeted advice. What's your main goal or concern here?`
+                    ]
+                };
+
+                const langResponses = responses[lang] || responses.en;
+                const randomText = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: randomText,
+                    suggestions: ["🚀 Career Planning", "📚 Skill Development", "💼 Job Search Help", "💪 Motivation & Support", "🎯 Goal Setting"],
+                    followUp: ["What's your biggest career challenge right now?", "What would success look like for you?", "How can I best support your goals?"]
+                };
+            }
+
+            getEmpatheticResponse(analysis, lang) {
+                const responses = {
+                    en: {
+                        anxious: [
+                            "I can sense you're feeling a bit anxious about this, and that's completely understandable. Career decisions can feel overwhelming, but you're taking the right step by seeking guidance. Let's break this down into manageable pieces. What specific aspect is causing you the most worry?",
+                            "It sounds like you're going through some uncertainty right now. That feeling is actually quite common and shows you care about making the right choice. Many successful professionals have felt exactly what you're experiencing. What would help you feel more confident about moving forward?"
+                        ],
+                        frustrated: [
+                            "I hear the frustration in your message, and I want you to know that feeling stuck is a normal part of the career journey. Sometimes the most successful people are those who push through these challenging moments. What's the biggest obstacle you're facing right now?",
+                            "It sounds like you've been working hard on this and hitting some roadblocks. That's incredibly frustrating, but it also shows your persistence. Let's approach this from a different angle - what has worked well for you so far?"
+                        ],
+                        stressed: [
+                            "I can tell you're under a lot of pressure right now. Career stress is real, and it's important to address it thoughtfully. Let's focus on what you can control and take this one step at a time. What's the most pressing issue you're dealing with?",
+                            "It sounds like you're juggling a lot right now. When we're stressed, everything can feel urgent and overwhelming. Let's prioritize what's most important and create a manageable plan. What would give you the biggest sense of relief if we tackled it first?"
+                        ]
+                    }
+                };
+
+                const emotionResponses = responses[lang]?.[analysis.emotion] || responses.en[analysis.emotion];
+                if (!emotionResponses) return this.getCategoryResponse(analysis, lang);
+
+                const selectedResponse = emotionResponses[Math.floor(Math.random() * emotionResponses.length)];
+
+                return {
+                    text: selectedResponse,
+                    suggestions: this.getEmotionBasedSuggestions(analysis.emotion),
+                    resources: this.getEmotionBasedResources(analysis.emotion),
+                    followUp: ["What would make you feel more confident?", "What support do you need most right now?", "What's one small step we could focus on?"]
+                };
+            }
+
+            getSkillSpecificResponse(analysis, lang) {
+                const skill = analysis.entities.skills[0];
+                const responses = {
+                    en: [
+                        `Great choice focusing on ${skill}! This is definitely a valuable skill in today's market. Based on current industry trends, professionals with ${skill} skills are in high demand. Let me share some specific insights about building expertise in this area.`,
+                        `I see you're interested in ${skill} - that's fantastic! This skill opens up many exciting career opportunities. Whether you're just starting or looking to advance, I can help you create a targeted learning path for ${skill}.`,
+                        `${skill} is an excellent skill to develop! I've helped many people successfully build their ${skill} expertise. The key is understanding both the technical aspects and how it applies to real-world projects. What's your current experience level with ${skill}?`
+                    ]
+                };
+
+                const langResponses = responses[lang] || responses.en;
+                const selectedResponse = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: selectedResponse,
+                    suggestions: this.getSkillBasedSuggestions(skill),
+                    resources: this.getSkillBasedResources(skill),
+                    followUp: [`What projects have you worked on with ${skill}?`, `What aspect of ${skill} interests you most?`, `Are you looking to use ${skill} in a specific industry?`]
+                };
+            }
+
+            getPersonalizedCareerResponse(analysis, lang) {
+                // Use conversation history to provide personalized advice
+                const previousContext = this.conversationHistory.map(h => h.context).slice(-3);
+                const userInterests = this.userProfile.interests.slice(0, 3);
+                const experience = this.userProfile.experience || 'developing';
+
+                const responses = {
+                    en: [
+                        `Based on our conversation, I can see you're ${experience} and have shown interest in ${userInterests.join(', ')}. This gives us a great foundation to build on. Career transitions are exciting opportunities to align your skills with your passions.`,
+                        `I've been following your career journey through our chat, and I'm impressed by your thoughtful approach. With your background in ${userInterests.join(' and ')}, you have several promising paths ahead. Let's explore which direction feels most aligned with your goals.`,
+                        `From what you've shared, you're clearly someone who thinks strategically about career growth. Your interest in ${userInterests.join(', ')} combined with your ${experience} level puts you in a strong position. What excites you most about your next career move?`
+                    ]
+                };
+
+                const langResponses = responses[lang] || responses.en;
+                const selectedResponse = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: selectedResponse,
+                    suggestions: this.getPersonalizedSuggestions(analysis, userInterests),
+                    resources: this.getPersonalizedResources(userInterests),
+                    followUp: ["What's your ideal work environment?", "What motivates you most in your career?", "Where do you see yourself in 2-3 years?"]
+                };
+            }
+
+            getContextAwareResponse(analysis, lang) {
+                const lastBotMessage = this.conversationHistory[this.conversationHistory.length - 1]?.bot || '';
+                const conversationFlow = this.analyzeConversationFlow();
+
+                if (conversationFlow === 'deepening') {
+                    return this.getDeepeningResponse(analysis, lang);
+                } else if (conversationFlow === 'shifting') {
+                    return this.getTransitionResponse(analysis, lang);
+                } else {
+                    return this.getContinuationResponse(analysis, lang);
+                }
+            }
+
+            analyzeConversationFlow() {
+                if (this.conversationHistory.length < 2) return 'starting';
+                
+                const lastTwoContexts = this.conversationHistory.slice(-2).map(h => h.context);
+                
+                if (lastTwoContexts[0] === lastTwoContexts[1]) {
+                    return 'deepening'; // Same topic, going deeper
+                } else {
+                    return 'shifting'; // Different topics, shifting focus
+                }
+            }
+
+            getDeepeningResponse(analysis, lang) {
+                const responses = {
+                    en: [
+                        "I can see this topic is really important to you, and I'm glad we're diving deeper into it. Let me provide some more specific insights that might be helpful.",
+                        "Since we're exploring this area further, let me share some advanced strategies that could make a real difference for you.",
+                        "Great follow-up question! This shows you're thinking critically about this topic. Here's what I'd recommend based on your specific situation."
+                    ]
+                };
+
+                const langResponses = responses[lang] || responses.en;
+                const selectedResponse = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: selectedResponse + " " + this.getDetailedAdvice(analysis, lang),
+                    suggestions: this.getAdvancedSuggestions(analysis.context),
+                    followUp: ["Would you like me to elaborate on any specific aspect?", "What challenges do you anticipate?", "How does this fit with your timeline?"]
+                };
+            }
+
+            getCategoryResponse(analysis, lang) {
+                // Enhanced fallback that uses the original category system but with analysis
+                if (analysis.context.includes('career')) {
+                    return this.getEnhancedCareerResponse(analysis, lang);
+                } else if (analysis.context.includes('learning') || analysis.context.includes('skill')) {
+                    return this.getEnhancedLearningResponse(analysis, lang);
+                } else if (analysis.context.includes('technology')) {
+                    return this.getEnhancedTechResponse(analysis, lang);
+                } else {
+                    return this.getEnhancedDefaultResponse(analysis, lang);
+                }
+            }
+
+            getEnhancedCareerResponse(analysis, lang) {
+                const baseResponse = this.getCareerResponse('', lang);
+                
+                // Enhance with analysis insights
+                if (analysis.urgency === 'high') {
+                    baseResponse.text = "I understand you need career guidance quickly. " + baseResponse.text;
+                    baseResponse.suggestions.unshift("🚨 Urgent Career Help");
+                }
+
+                if (analysis.entities.industries.length > 0) {
+                    const industry = analysis.entities.industries[0];
+                    baseResponse.text += ` Since you mentioned ${industry}, I can provide industry-specific insights.`;
+                    baseResponse.followUp.push(`What specific role in ${industry} interests you?`);
+                }
+
+                return baseResponse;
+            }
+
+            getEnhancedLearningResponse(analysis, lang) {
+                const baseResponse = this.getLearningResponse('', lang);
+                
+                if (analysis.entities.skills.length > 0) {
+                    const skills = analysis.entities.skills.join(', ');
+                    baseResponse.text = `I see you're interested in ${skills}. ` + baseResponse.text;
+                }
+
+                if (this.userProfile.experience === 'beginner') {
+                    baseResponse.suggestions.unshift("🌱 Beginner-Friendly Resources");
+                } else if (this.userProfile.experience === 'experienced') {
+                    baseResponse.suggestions.unshift("🚀 Advanced Learning Paths");
+                }
+
+                return baseResponse;
+            }
+
+            getEnhancedTechResponse(analysis, lang) {
+                const baseResponse = this.getTechResponse('', lang);
+                
+                if (analysis.intent === 'how_to') {
+                    baseResponse.text = "Let me walk you through the practical steps. " + baseResponse.text;
+                    baseResponse.suggestions.unshift("📋 Step-by-Step Guide");
+                }
+
+                return baseResponse;
+            }
+
+            getEnhancedDefaultResponse(analysis, lang) {
+                const contextualGreeting = this.getContextualGreeting(analysis, lang);
+                const smartSuggestions = this.getSmartSuggestionsForContext(analysis.context);
+
+                return {
+                    text: contextualGreeting,
+                    suggestions: smartSuggestions,
+                    followUp: ["What specific area would you like to explore?", "What's your main career goal right now?", "How can I best support you today?"]
+                };
+            }
+
+            getContextualGreeting(analysis, lang) {
+                const greetings = {
+                    en: {
+                        career_transition: "Career transitions can be both exciting and challenging! I'm here to help you navigate this important decision.",
+                        job_search: "Job searching requires strategy and persistence. Let me help you create an effective approach.",
+                        skill_development: "Investing in new skills is one of the best career moves you can make. What would you like to learn?",
+                        general: "I'm here to help with any career-related questions or challenges you're facing. What's on your mind?"
+                    }
+                };
+
+                return greetings[lang]?.[analysis.context] || greetings.en[analysis.context] || greetings.en.general;
+            }
+
+            // Helper methods for suggestions and resources
+            getEmotionBasedSuggestions(emotion) {
+                const suggestions = {
+                    anxious: ["💪 Build Confidence", "🎯 Set Small Goals", "🧘 Manage Anxiety", "🤝 Find Support"],
+                    frustrated: ["🔄 Try New Approach", "💡 Creative Solutions", "🎯 Refocus Goals", "🤝 Get Help"],
+                    stressed: ["🧘 Stress Management", "⏰ Time Management", "🎯 Prioritize Tasks", "💪 Self Care"]
+                };
+                return suggestions[emotion] || ["💪 Stay Positive", "🎯 Focus Forward", "🤝 Get Support"];
+            }
+
+            getSkillBasedSuggestions(skill) {
+                return [`📚 Learn ${skill}`, `🚀 ${skill} Projects`, `👥 ${skill} Community`, `💼 ${skill} Jobs`, `🏆 ${skill} Certification`];
+            }
+
+            getPersonalizedSuggestions(analysis, interests) {
+                const base = ["🎯 Career Planning", "📈 Skill Assessment", "🌟 Goal Setting"];
+                interests.forEach(interest => {
+                    base.push(`💼 ${interest} Careers`);
+                });
+                return base.slice(0, 6);
+            }
+
+            getDetailedAdvice(analysis, lang) {
+                const adviceMap = {
+                    career_transition: "When changing careers, focus on transferable skills and gradually build expertise in your target field. Consider informational interviews and networking in your desired industry.",
+                    job_search: "A successful job search combines multiple strategies: networking (70% of jobs come through connections), targeted applications, and consistent follow-up. Quality over quantity is key.",
+                    skill_development: "The most effective learning combines theory with practice. Start with fundamentals, build projects, and seek feedback from experienced practitioners.",
+                    interview: "Great interviews are conversations, not interrogations. Research the company, prepare specific examples using the STAR method, and ask thoughtful questions.",
+                    salary: "Salary negotiation is about demonstrating value. Research market rates, document your achievements, and be prepared to discuss your unique contributions."
+                };
+
+                return adviceMap[analysis.context] || "Focus on taking consistent, small steps toward your goal. Progress compounds over time.";
+            }
+
+            getAdvancedSuggestions(context) {
+                const suggestions = {
+                    career_transition: ["🔄 Transition Timeline", "🎯 Skill Gap Analysis", "👥 Industry Networking", "📊 Market Research"],
+                    job_search: ["🎯 Target Companies", "📝 Application Tracking", "🤝 Interview Practice", "📈 Follow-up Strategy"],
+                    skill_development: ["🏗️ Project Portfolio", "👨‍🏫 Find Mentors", "🏆 Get Certified", "📚 Advanced Resources"],
+                    interview: ["🎭 Mock Interviews", "📋 STAR Examples", "❓ Smart Questions", "🎯 Company Research"],
+                    salary: ["💰 Salary Research", "📊 Value Proposition", "🗣️ Negotiation Scripts", "📈 Performance Metrics"]
+                };
+
+                return suggestions[context] || ["🎯 Next Steps", "📚 Resources", "🤝 Get Support", "📈 Track Progress"];
+            }
+
+            getTransitionResponse(analysis, lang) {
+                const responses = {
+                    en: [
+                        "I see we're moving into a new area now. That's great - it shows you're thinking holistically about your career. Let me help you with this new topic.",
+                        "Interesting shift in focus! This broader perspective will definitely help you make more informed decisions. Here's what I think about this aspect.",
+                        "Good point to bring up! These different areas often connect in ways that aren't immediately obvious. Let me share some insights on this."
+                    ]
+                };
+
+                const langResponses = responses[lang] || responses.en;
+                const selectedResponse = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: selectedResponse + " " + this.getDetailedAdvice(analysis, lang),
+                    suggestions: this.getContextualSuggestions(analysis.context),
+                    followUp: ["How does this connect to your previous question?", "What's the priority between these different areas?", "Which aspect should we focus on first?"]
+                };
+            }
+
+            getContinuationResponse(analysis, lang) {
+                const responses = {
+                    en: [
+                        "Building on what we discussed, here's another perspective that might be valuable for your situation.",
+                        "That's a natural next question! Let me provide some additional insights that complement what we've covered.",
+                        "Great follow-up! This shows you're really thinking through the implications. Here's what I'd add to our discussion."
+                    ]
+                };
+
+                const langResponses = responses[lang] || responses.en;
+                const selectedResponse = langResponses[Math.floor(Math.random() * langResponses.length)];
+
+                return {
+                    text: selectedResponse + " " + this.getDetailedAdvice(analysis, lang),
+                    suggestions: this.getContextualSuggestions(analysis.context),
+                    followUp: ["What other aspects are you considering?", "How does this fit with your timeline?", "What questions do you still have?"]
+                };
+            }
+
+            getContextualSuggestions(context) {
+                const suggestions = {
+                    career_transition: ["🔄 Career Change Guide", "🎯 Skills Assessment", "👥 Network Building", "📊 Industry Research"],
+                    job_search: ["📝 Resume Tips", "🎤 Interview Prep", "🔍 Job Boards", "🤝 Networking"],
+                    skill_development: ["📚 Learning Path", "🏗️ Practice Projects", "🏆 Certifications", "👨‍🏫 Find Mentors"],
+                    technology: ["💻 Tech Skills", "🚀 Projects", "👥 Dev Community", "💼 Tech Jobs"],
+                    salary: ["💰 Salary Research", "🗣️ Negotiation", "📈 Value Proof", "💼 Benefits"],
+                    networking: ["🤝 LinkedIn Tips", "🎪 Events", "☕ Coffee Chats", "👥 Communities"],
+                    general: ["🎯 Goal Setting", "📈 Career Planning", "💪 Skill Building", "🤝 Get Support"]
+                };
+
+                return suggestions[context] || suggestions.general;
+            }
+
+            getEmotionBasedResources(emotion) {
+                const resources = {
+                    anxious: [
+                        { name: "Career Anxiety Workbook", description: "Practical exercises to manage career-related anxiety", url: "https://www.mindtools.com/pages/article/managing-career-anxiety.htm" },
+                        { name: "Mindfulness for Professionals", description: "Stress reduction techniques for career challenges", url: "https://www.headspace.com/work-life-balance" }
+                    ],
+                    frustrated: [
+                        { name: "Overcoming Career Obstacles", description: "Strategies for breaking through career barriers", url: "https://www.linkedin.com/learning/topics/career-development" },
+                        { name: "Problem-Solving Techniques", description: "Creative approaches to career challenges" }
+                    ],
+                    stressed: [
+                        { name: "Work-Life Balance Guide", description: "Managing career stress and maintaining well-being", url: "https://www.mayoclinic.org/healthy-lifestyle/adult-health/in-depth/work-life-balance/art-20048134" },
+                        { name: "Stress Management Tools", description: "Practical techniques for managing career pressure" }
+                    ]
+                };
+
+                return resources[emotion] || [];
+            }
+
+            getSkillBasedResources(skill) {
+                const skillResources = {
+                    javascript: [
+                        { name: "JavaScript.info", description: "Comprehensive JavaScript tutorial", url: "https://javascript.info/" },
+                        { name: "freeCodeCamp JS", description: "Interactive JavaScript course", url: "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/" }
+                    ],
+                    python: [
+                        { name: "Python.org Tutorial", description: "Official Python documentation", url: "https://docs.python.org/3/tutorial/" },
+                        { name: "Automate the Boring Stuff", description: "Practical Python for beginners", url: "https://automatetheboringstuff.com/" }
+                    ],
+                    react: [
+                        { name: "React Documentation", description: "Official React learning resources", url: "https://reactjs.org/docs/getting-started.html" },
+                        { name: "React Tutorial", description: "Interactive React tutorial", url: "https://reactjs.org/tutorial/tutorial.html" }
+                    ]
+                };
+
+                return skillResources[skill] || [
+                    { name: `${skill} Learning Path`, description: `Curated resources for learning ${skill}` },
+                    { name: `${skill} Community`, description: `Connect with other ${skill} learners and professionals` }
+                ];
+            }
+
+            getPersonalizedResources(interests) {
+                const resources = [];
+                interests.forEach(interest => {
+                    resources.push({
+                        name: `${interest} Career Guide`,
+                        description: `Comprehensive guide to careers in ${interest}`,
+                        url: `https://www.linkedin.com/jobs/${interest}-jobs/`
+                    });
+                });
+
+                return resources.slice(0, 3); // Limit to 3 resources
+            }
+
+            getSmartSuggestionsForContext(context) {
+                return this.getContextualSuggestions(context);
+            }
+
+            analyzeMessageContext(msg) {
+                if (msg.includes('work') || msg.includes('job')) return 'work and career';
+                if (msg.includes('learn') || msg.includes('study')) return 'learning and development';
+                if (msg.includes('skill') || msg.includes('ability')) return 'skills and abilities';
+                if (msg.includes('future') || msg.includes('goal')) return 'future planning';
+                if (msg.includes('help') || msg.includes('support')) return 'getting support';
+                return 'your career journey';
+            }
+
+            speakText(text) {
+                if (this.isSpeaking) {
+                    this.synthesis.cancel();
+                }
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = this.getLanguageCode(this.currentLanguage);
+                utterance.rate = 0.9;
+                utterance.pitch = 1;
+                utterance.volume = 0.8;
+
+                // Find appropriate voice
+                const voice = this.voices.find(v => v.lang.startsWith(this.currentLanguage));
+                if (voice) {
+                    utterance.voice = voice;
+                }
+
+                utterance.onstart = () => {
+                    this.isSpeaking = true;
+                };
+
+                utterance.onend = () => {
+                    this.isSpeaking = false;
+                    // Auto-listen if voice mode is enabled
+                    if (this.voiceMode && this.recognition) {
+                        setTimeout(() => {
+                            this.toggleVoiceInput();
+                        }, 1000);
+                    }
+                };
+
+                this.synthesis.speak(utterance);
+            }
+
+            showNotification(message, type = 'success') {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.className = `notification ${type}`;
+                notification.classList.add('show');
+
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 4000);
+            }
+        }
+
+        // Global functions
+        function sendQuickMessage(message) {
+            document.getElementById('chatInput').value = message;
+            chatbot.sendMessage();
+        }
+
+        // Initialize chatbot when page loads
+        let chatbot;
+        document.addEventListener('DOMContentLoaded', function() {
+            chatbot = new StandaloneChatbot();
+        });
+    </script>
+</body>
+</html>
