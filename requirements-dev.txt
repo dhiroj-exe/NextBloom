@@ -1,0 +1,31 @@
+# NextBloom - Development Dependencies
+# Additional packages for development, testing, and debugging
+
+# Include base requirements
+-r requirements-minimal.txt
+
+# Testing Framework
+pytest>=7.4.0
+pytest-flask>=1.2.0
+pytest-cov>=4.1.0
+
+# Code Quality and Formatting
+black>=23.7.0
+flake8>=6.0.0
+isort>=5.12.0
+
+# Development Tools
+flask-debugtoolbar>=0.13.1
+
+# Documentation
+sphinx>=7.1.0
+sphinx-rtd-theme>=1.3.0
+
+# Security scanning
+bandit>=1.7.5
+
+# Performance profiling
+flask-profiler>=1.8.1
+
+# Environment management
+python-decouple>=3.8

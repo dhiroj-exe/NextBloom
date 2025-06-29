@@ -1,0 +1,19 @@
+# NextBloom - Essential Dependencies Only
+# Minimal requirements for running the current application
+
+# Core Flask Framework and Extensions
+flask>=2.3.0
+flask-cors>=4.0.0
+flask-bcrypt>=1.0.1
+
+# Environment Configuration
+python-dotenv>=1.0.0
+
+# Database (currently using JSON files, but keeping for future MongoDB integration)
+pymongo>=4.5.0
+
+# HTTP Requests for API testing and external calls
+requests>=2.31.0
+
+# Type hints support for older Python versions
+typing-extensions>=4.7.0
